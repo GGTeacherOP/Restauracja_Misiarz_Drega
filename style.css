@@ -256,3 +256,67 @@ html, body {
     font-size: 1rem;
     background-color: #fafafa;
   }
+  form button {
+    padding: 1rem;
+    border: none;
+    background-color: #b52d22;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  
+  form button:hover {
+    background-color: #9e261c;
+  }
+  
+  footer {
+    background-color: #2c2c2c;
+    color: white;
+    padding: 3rem 2rem 2rem;
+    width: 100%;
+  }
+  
+  .footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 2rem;
+  }
+  
+  .footer-section {
+    max-width: 300px;
+    margin: 1rem;
+  }
+  
+  .footer-section h4 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #ffab91;
+  }
+  
+  .footer-section p {
+    margin: 0.3rem 0;
+  }
+  
+  .socials a {
+    margin-right: 1rem;
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+  
+  .socials a:hover {
+    transform: scale(1.2);
+  }
+  
+  .socials img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  footer .copyright {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #ccc;
+  }
