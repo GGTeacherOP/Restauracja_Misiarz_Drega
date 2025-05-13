@@ -14,10 +14,25 @@
       <input type="email" name="email" placeholder="Adres e-mail" required />
       <input type="password" name="password" placeholder="Hasło" required minlength="6" />
       <input type="password" name="confirm" placeholder="Potwierdź hasło" required minlength="6" />
-      <button type="submit">Zarejestruj się</button>
+
+    <label class="regulamin-label">
+      <input type="checkbox" id="regulamin" />
+      <span>Akceptuję <a href="regulamin.html" target="_blank">regulamin</a></span>
+    </label>
+
+      <button type="submit" id="submitBtn" class="submit-button" disabled>Zarejestruj się</button>
     </form>
 
     <a href="index.html" class="back-link">Powrót do strony głównej</a>
   </section>
+
+  <script>
+    const checkbox = document.getElementById('regulamin');
+    const submitBtn = document.getElementById('submitBtn');
+
+    checkbox.addEventListener('change', () => {
+      submitBtn.disabled = !checkbox.checked;
+    });
+  </script>
 </body>
 </html>
