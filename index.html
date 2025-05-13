@@ -57,16 +57,23 @@
   <section id="galeria">
     <h1>Galeria</h1>
     <div class="gallery">
-      <img src="https://az.przepisy.pl/www-przepisy-pl/www.przepisy.pl/przepisy3ii/img/variants/800x0/zeberka-pieczone-w-sosie-wlasnym.jpg" alt="Żeberka" />
-      <img src="https://assets.epicurious.com/photos/5c745a108918ee7ab68daf79/1:1/w_2560%2Cc_limit/Smashburger-recipe-120219.jpg" alt="Burger" />
-      <img src="https://www.winiary.pl/sites/default/files/styles/srh_recipes/public/srh_recipes/b76bc0e633163dc08fc20dbd5b67af9c.jpg?h=06ac0d8c&itok=CJcKP7NX" alt="Makaron" />
-      <img src="https://pizzababilon.pl/wp-content/uploads/pizza-rzymska-z-czym-jest-i-jak-j-zrobi.jpg" alt="Pizza" />
-      <img src="https://gotujezlewiatanem.pl/wp-content/uploads/2022/05/AdobeStock_258433064-kopia.jpeg" alt="Burger" />
-      <img src="https://api.broilking.pl/api/media/c/public/crop/1050/688/2/13/fp/images/przepisy/przepis-na-zeberka-z-grilla-w-miodowej-glazurze/przepis-na-zeberka-z-grilla-w-miodowej-glazurze-01.jpg" alt="Żeberka" />
-      <img src="https://static.wiadomoscihandlowe.pl/images/2023/07/10/o_486060_1280.webp" alt="Piwo" />
-      <img src="https://www.horecabc.pl/wp-content/uploads/2022/02/pizza3.webp" alt="Pizza" />
-      <img src="https://cdn.wyjatkowyprezent.pl/storage/photos/products/125298/114410.jpg?w=2000&h=2000" alt="Burger" />
-      <img src="https://winnicalidla.pl/media/amasty/blog/magpleasure/mpblog/upload/9/0/900ec11a0faa99de1980fd0fe1a1e8bd.jpg" alt="Piwo" />
+      <img src="https://az.przepisy.pl/www-przepisy-pl/www.przepisy.pl/przepisy3ii/img/variants/800x0/zeberka-pieczone-w-sosie-wlasnym.jpg" alt="Żeberka" class="miniatura"/>
+      <img src="https://assets.epicurious.com/photos/5c745a108918ee7ab68daf79/1:1/w_2560%2Cc_limit/Smashburger-recipe-120219.jpg" alt="Burger" class="miniatura"/>
+      <img src="https://www.winiary.pl/sites/default/files/styles/srh_recipes/public/srh_recipes/b76bc0e633163dc08fc20dbd5b67af9c.jpg?h=06ac0d8c&itok=CJcKP7NX" alt="Makaron" class="miniatura"/>
+      <img src="https://pizzababilon.pl/wp-content/uploads/pizza-rzymska-z-czym-jest-i-jak-j-zrobi.jpg" alt="Pizza" class="miniatura"/>
+      <img src="https://gotujezlewiatanem.pl/wp-content/uploads/2022/05/AdobeStock_258433064-kopia.jpeg" alt="Burger" class="miniatura"/>
+      <img src="https://api.broilking.pl/api/media/c/public/crop/1050/688/2/13/fp/images/przepisy/przepis-na-zeberka-z-grilla-w-miodowej-glazurze/przepis-na-zeberka-z-grilla-w-miodowej-glazurze-01.jpg" alt="Żeberka" class="miniatura"/>
+      <img src="https://static.wiadomoscihandlowe.pl/images/2023/07/10/o_486060_1280.webp" alt="Piwo" class="miniatura"/>
+      <img src="https://www.horecabc.pl/wp-content/uploads/2022/02/pizza3.webp" alt="Pizza" class="miniatura"/>
+      <img src="https://cdn.wyjatkowyprezent.pl/storage/photos/products/125298/114410.jpg?w=2000&h=2000" alt="Burger" class="miniatura"/>
+      <img src="https://winnicalidla.pl/media/amasty/blog/magpleasure/mpblog/upload/9/0/900ec11a0faa99de1980fd0fe1a1e8bd.jpg" alt="Piwo" class="miniatura"/>
+      <img src="https://res.cloudinary.com/norgesgruppen/images/c_scale,dpr_auto,f_auto,q_auto:eco,w_1600/axcdfcfmyahxjmmj99pe/pizza-diavola" alt="Pizza" class="miniatura"/>
+      <img src="https://www.allrecipes.com/thmb/nO3iistRRBHuMCz1Gr_0XuMGaWg=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/ALR-8513545-penne-alla-vodka-VAT-hero-4x3-2-4a53c968c3d94a32816f01f5793702ce.jpg" alt="Pizza" class="miniatura"/>
+      <img src="https://www.gardengourmet.com/sites/default/files/recipes/cd69f47414565ae76769b93398728fd7_221004_gg_american-bbq-style-burger_recept.jpg" alt="Pizza" class="miniatura"/>
+    </div>
+    <div class="popup" id="popup">
+      <span class="close" id="close">&times;</span>
+      <img src="" alt="Powiększenie" id="popup-img">
     </div>
   </section>
 
@@ -137,5 +144,29 @@
       <p>&copy; 2025 Restauracja Kraftowa. Wszelkie prawa zastrzeżone.</p>
     </div>
   </footer>
+
+  <script>
+  const popup = document.getElementById('popup');
+  const popupImg = document.getElementById('popup-img');
+  const closeBtn = document.getElementById('close');
+
+  document.querySelectorAll('.miniatura').forEach(img => {
+    img.addEventListener('click', () => {
+      popupImg.src = img.src;
+      popup.classList.add('show');
+    });
+  });
+
+  closeBtn.addEventListener('click', () => {
+    popup.classList.remove('show');
+  });
+
+  popup.addEventListener('click', (e) => {
+    if (e.target === popup) {
+      popup.classList.remove('show');
+    }
+  });
+</script>
+
 </body>
 </html>
