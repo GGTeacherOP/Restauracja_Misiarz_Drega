@@ -33,6 +33,20 @@
     checkbox.addEventListener('change', () => {
       submitBtn.disabled = !checkbox.checked;
     });
+
+    const emailInput = document.querySelector('input[name="email"]');
+
+    emailInput.addEventListener('input', () => {
+    const emailValue = emailInput.value;
+    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+
+     if (!isValid) {
+        emailInput.setCustomValidity("Wprowadź poprawny adres e-mail");
+      } else {
+        emailInput.setCustomValidity("");
+      }
+    });
+
   </script>
 </body>
 </html>
