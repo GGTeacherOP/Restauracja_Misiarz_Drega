@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
@@ -10,9 +11,15 @@
 <body>
   <div class="login-container">
     <h2>Zaloguj się</h2>
-    <form action="login2.php" method="post">
+    <form action="login.php" method="post">
       <input type="email" name="email" placeholder="Adres email" required />
       <input type="password" name="password" placeholder="Hasło" required />
+      
+      <label class="remember-me">
+        <input type="checkbox" name="remember" id="remember">
+        <span>Zapamiętaj mnie</span>
+      </label>
+      
       <div class="buttons">
         <button type="submit" class="login-btn">Zaloguj</button>
         <a href="rejestracja.html" class="register-btn">Zarejestruj się</a>
