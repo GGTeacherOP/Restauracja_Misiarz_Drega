@@ -80,28 +80,31 @@
   <section id="opinie">
     <h2>Opinie</h2>
     <div class="opinie-container">
-      <div class="opinie-item">
-        <img src="https://ufrsante.uidt.sn/wp-content/uploads/2023/09/default-avatar-profile-icon-vector-social-media-user-photo-700-205577532.jpg" alt="Anna" />
-        <div class="user-comment">
-          <strong>Anna</strong>
-          <blockquote>Najlepsza restauracja w mieście!</blockquote>
-        </div>
-      </div>
-      <div class="opinie-item">
-        <img src="https://ufrsante.uidt.sn/wp-content/uploads/2023/09/default-avatar-profile-icon-vector-social-media-user-photo-700-205577532.jpg" alt="Anna" />
-        <div class="user-comment">
-          <strong>Marek</strong>
-          <blockquote>Wyjątkowe miejsce z klimatem i pysznym jedzeniem. Obsługa profesjonalna i bardzo życzliwa — wrócę tu na pewno!</blockquote>
-        </div>
-      </div>
-      <div class="opinie-item">
-        <img src="https://ufrsante.uidt.sn/wp-content/uploads/2023/09/default-avatar-profile-icon-vector-social-media-user-photo-700-205577532.jpg" alt="Anna" />
-        <div class="user-comment">
-          <strong>Ela</strong>
-          <blockquote>Burger był rewelacyjny, a wszystko podane z uśmiechem. Świetne miejsce na kolację z przyjaciółmi.</blockquote>
-        </div>
-      </div>
+        
+        <?php
+        ?>
     </div>
+    
+    <?php if (isset($_SESSION['user_id'])): ?>
+    <div class="dodaj-opinie">
+        <h3>Dodaj swoją opinię</h3>
+        <form action="dodaj_opinie.php" method="post">
+            <textarea name="tresc" placeholder="Twoja opinia" required></textarea>
+            <select name="ocena" required>
+                <option value="">Wybierz ocenę</option>
+                <option value="5">5 - Doskonałe</option>
+                <option value="4">4 - Bardzo dobre</option>
+                <option value="3">3 - Dobre</option>
+                <option value="2">2 - Średnie</option>
+                <option value="1">1 - Słabe</option>
+            </select>
+            <button type="submit">Wyślij opinię</button>
+        </form>
+    </div>
+    <?php else: ?>
+    <p>Aby dodać opinię, <a href="login.html?redirect=index.html#opinie">zaloguj się</a>.</p>
+    <?php endif; ?>
+</section> 
 
   <section id="kontakt">
     <h1>Masz pytania? Napisz do nas</h1>
