@@ -11,6 +11,31 @@
 </head>
 <body>
   <main>
+  <?php
+session_start();
+require_once 'db_config.php';
+
+
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM uzytkownicy WHERE remember_token = ? AND token_expiry > NOW()");
+        $stmt->execute([$_COOKIE['remember_token']]);
+        $user = $stmt->fetch();
+
+        if ($user) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['imie'] . ' ' . $user['nazwisko'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_role'] = $user['uprawnienia'];
+        }
+    } catch (PDOException $e) {
+       
+        error_log("Auto-login error: " . $e->getMessage());
+    }
+}
+
+
+?>
   <nav class="nav-bar">
     <ul class="nav-links">
       <li><a href="menu.php">Menu</a></li>
