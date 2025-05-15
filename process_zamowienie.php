@@ -38,6 +38,11 @@ $ceny_dan = [
     'Piwo kraftowe' => 16.00
 ];
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.html?redirect=zamowienie.html');
+    exit;
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
@@ -89,14 +94,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     
     try {
-        $stmt = $pdo->prepare("INSERT INTO zamowienia (imie_nazwisko, telefon, adres, dania, cena) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([
-            $_POST['imie'],
-            $_POST['telefon'],
-            $_POST['adres'],
-            $dania_text,
-            $cena_calkowita
-        ]);
+        $stmt = $pdo->prepare("INSERT INTO zamowienia (imie_nazwisko, telefon, adres, dania, cena, user_id) VALUES (?, ?, ?, ?, ?, ?)");
+$stmt->execute([
+    $_POST['imie'],
+    $_POST['telefon'],
+    $_POST['adres'],
+    $dania_text,
+    $cena_calkowita,
+    $_SESSION['user_id']
+]);
         
         echo '<!DOCTYPE html>
         <html lang="pl">
