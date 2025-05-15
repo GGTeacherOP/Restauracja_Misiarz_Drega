@@ -1,3 +1,12 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.html?redirect=zamowienie.html');
+    exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="pl">
 <!DOCTYPE html>
 <html lang="pl">
 <head>

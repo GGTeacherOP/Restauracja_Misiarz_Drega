@@ -1,44 +1,26 @@
-<?php
-session_start();
-
-$host = 'localhost';
-$db   = 'restauracja';
-$user = 'root';
-$pass = '';
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES => false,
-];
-
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (PDOException $e) {
-    die("Błąd połączenia: " . $e->getMessage());
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
-
-    $stmt = $pdo->prepare("SELECT * FROM uzytkownicy WHERE email = ?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch();
-
-    if ($user && password_verify($password, $user['haslo'])) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_name'] = $user['imie'] . ' ' . $user['nazwisko'];
-        $_SESSION['user_email'] = $user['email'];
-        $_SESSION['user_role'] = $user['uprawnienia'];
-
-        $redirect = $_GET['redirect'] ?? 'index.html';
-        header("Location: $redirect");
-        exit;
-    } else {
-        $error = "Nieprawidłowy email lub hasło";
-    }
-}
-?>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logowanie</title>
+  <link rel="stylesheet" href="login.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="login-container">
+    <h2>Zaloguj sie</h2>
+    <form action="login2.php" method="post">
+      <input type="email" name="email" placeholder="Adres email" required />
+      <input type="password" name="password" placeholder="Hasło" required />
+      <div class="buttons">
+        <button type="submit" class="login-btn">Zaloguj</button>
+        <a href="rejestracja.html" class="register-btn">Zarejestruj się</a>
+      </div>
+    </form>
+    <?php if (isset($error)): ?>
+    <div class="error-message"><?= htmlspecialchars($error) ?></div>
+  <?php endif; ?>
+  </div>
+</body>
+</html>
