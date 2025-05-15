@@ -110,3 +110,19 @@ form input {
 .error-container li {
   margin-bottom: 0.5rem;
 }
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  cursor: pointer;
+}
+
+.remember-me input {
+  margin-right: 0.5rem;
+  width: auto;
+}
+
+.remember-me span {
+  font-size: 0.9rem;
+}
