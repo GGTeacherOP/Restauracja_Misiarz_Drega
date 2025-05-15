@@ -1,30 +1,26 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rejestracja</title>
-  <link rel="stylesheet" href="rejestracja.css" />
+  <link rel="stylesheet" href="login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <section class="form-section">
-    <h2>Rejestracja</h2>
-    <form action="#" method="post">
-      <input type="text" name="name" placeholder="Imię i nazwisko" required />
-      <input type="email" name="email" placeholder="Adres e-mail" required />
-      <input type="password" name="password" placeholder="Hasło" required minlength="6" />
-      <input type="password" name="confirm" placeholder="Potwierdź hasło" required minlength="6" />
-
-    <label class="regulamin-label">
-      <input type="checkbox" id="regulamin" />
-      <span>Akceptuję <a href="regulamin.html" target="_blank">regulamin</a></span>
-    </label>
-
-      <button type="submit" id="submitBtn" class="submit-button" disabled>Zarejestruj się</button>
+  <div class="login-container">
+    <h2>Zarejestruj się</h2>
+    <form action="rejestracja.php" method="post">
+      <input type="text" name="imie" placeholder="Imię" required>
+      <input type="text" name="nazwisko" placeholder="Nazwisko" required>
+      <input type="text" name="nazwa_uzytkownika" placeholder="Nazwa użytkownika" required>
+      <input type="email" name="email" placeholder="Adres email" required>
+      <input type="password" name="haslo" placeholder="Hasło" required>
+      <input type="password" name="potwierdz_haslo" placeholder="Potwierdź hasło" required>
+      <button type="submit" class="login-btn">Zarejestruj</button>
     </form>
-
-    <a href="index.html" class="back-link">Powrót do strony głównej</a>
-  </section>
+    <a href="login.php" class="back-link">Masz już konto? Zaloguj się</a>
+  </div>
 
   <script>
     const checkbox = document.getElementById('regulamin');

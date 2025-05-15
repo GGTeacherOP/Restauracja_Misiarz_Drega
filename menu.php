@@ -10,14 +10,21 @@
 
   <nav class="nav-bar">
     <ul class="nav-links">
-      <li><a href="index.html">Strona główna</a></li>
-      <li><a href="index.html#onas">O nas</a></li>
-      <li><a href="index.html#promocje">Promocje</a></li>
-      <li><a href="index.html#galeria">Galeria</a></li>
-      <li><a href="index.html#opinie">Opinie</a></li>
-      <li><a href="index.html#kontakt">Kontakt</a></li>
+      <li><a href="index.php">Strona główna</a></li>
+      <li><a href="index.php">O nas</a></li>
+      <li><a href="index.php">Promocje</a></li>
+      <li><a href="index.php">Galeria</a></li>
+      <li><a href="index.php">Opinie</a></li>
+      <li><a href="index.php">Kontakt</a></li>
     </ul>
-    <a href="login.html"><button class="login-button">Zaloguj się</button></a>
+    <?php if (isset($_SESSION['user_id'])): ?>
+    <div class="user-menu">
+        <span>Witaj, <?= htmlspecialchars($_SESSION['user_name']) ?></span>
+        <a href="logout.php" class="logout-button">Wyloguj</a>
+    </div>
+<?php else: ?>
+    <a href="login.php"><button class="login-button">Zaloguj się</button></a>
+<?php endif; ?>
   </nav>
 
   <main>

@@ -9,7 +9,7 @@
 </head>
 <body>
   <div class="login-container">
-    <h2>Zaloguj sie</h2>
+    <h2>Zaloguj się</h2>
     <form action="login2.php" method="post">
       <input type="email" name="email" placeholder="Adres email" required />
       <input type="password" name="password" placeholder="Hasło" required />
@@ -18,9 +18,10 @@
         <a href="rejestracja.html" class="register-btn">Zarejestruj się</a>
       </div>
     </form>
+    <a href="index.php" class="back-btn">← Powrót do strony głównej</a>
     <?php if (isset($error)): ?>
-    <div class="error-message"><?= htmlspecialchars($error) ?></div>
-  <?php endif; ?>
+      <div class="error-message"><?= htmlspecialchars($error) ?></div>
+    <?php endif; ?>
   </div>
 </body>
 </html>
