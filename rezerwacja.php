@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form method="POST" id="rezerwacjaForm">
             <label>Imię: <input type="text" name="imie" required></label><br><br>
             <label>Nazwisko: <input type="text" name="nazwisko" required></label><br><br>
-            <label>Telefon: <input type="tel" name="telefon" required></label>
+            <label>Telefon: <input type="tel" name="telefon" id="telefon" pattern="^\+48-\d{3}-\d{3}-\d{3}$" placeholder="+48-000-000-000" required></label>
             <label>Data: <input type="date" name="data" id="data" required></label><br><br>
             <label>Ilość osób: <input type="number" name="ilosc_osob" min="1" max="9" required></label><br><br>
             <input type="submit" value="Rezerwuj">
@@ -83,5 +83,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </div>
 </div>
+
+<script>
+
+
+    // Obsługa telefonu - tak jak wcześniej
+
+const telefonInput = document.getElementById('telefon');
+
+telefonInput.addEventListener('focus', function () {
+    if (!this.value.startsWith('+48-')) {
+        this.value = '+48-';
+        this.setSelectionRange(this.value.length, this.value.length);
+    }
+});
+
+telefonInput.addEventListener('input', function () {
+    let cursorPos = this.selectionStart;
+    let originalLength = this.value.length;
+
+    let digits = this.value.replace(/\D/g, '');
+
+    if (digits.startsWith('48')) {
+        digits = digits.substring(2);
+    }
+
+    digits = digits.substring(0, 9);
+
+    let formatted = '+48-';
+
+    if (digits.length > 6) {
+        formatted += digits.substring(0, 3) + '-' + digits.substring(3, 6) + '-' + digits.substring(6);
+    } else if (digits.length > 3) {
+        formatted += digits.substring(0, 3) + '-' + digits.substring(3);
+    } else {
+        formatted += digits;
+    }
+
+    this.value = formatted;
+
+    let newLength = this.value.length;
+    cursorPos = cursorPos + (newLength - originalLength);
+    this.setSelectionRange(cursorPos, cursorPos);
+});
+
+
+</script>
 </body>
 </html>
