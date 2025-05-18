@@ -64,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p>Dla grup liczących 10 lub więcej osób, prosimy o kontakt telefoniczny.</p>
         <h2>Spóźnienia</h2>
         <p>Przestrzeganie godziny rezerwacji jest bardzo ważne. W przypadku spóźnienia powyżej 15 minut, niestety będziemy zmuszeni przekazać zarezerwowany stolik innym gościom.</p>
+
         <h2>Rzut z góry restauracji</h2>
         <p>Kliknij na obrazek, aby go powiększyć i zobaczyć, gdzie znajduje się Twój stolik.</p>
 
@@ -96,7 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script>
-
 document.getElementById('data').addEventListener('change', function () {
     const data = this.value;
     fetch('godziny.php?data=' + data)
@@ -124,7 +124,7 @@ document.getElementById('data').addEventListener('change', function () {
         });
 });
 
-    // Obsługa telefonu - tak jak wcześniej
+// Obsługa telefonu - tak jak wcześniej
 
 const telefonInput = document.getElementById('telefon');
 
@@ -164,6 +164,8 @@ telefonInput.addEventListener('input', function () {
     this.setSelectionRange(cursorPos, cursorPos);
 });
 
+// Dodatkowo możesz zablokować wysłanie formularza, jeśli nie wybrano godziny
+
 document.getElementById('rezerwacjaForm').addEventListener('submit', function(e) {
     const godzinaVal = document.getElementById('wybranaGodzina').value;
     if (!godzinaVal) {
@@ -172,6 +174,27 @@ document.getElementById('rezerwacjaForm').addEventListener('submit', function(e)
     }
 });
 
+  const thumbnail = document.getElementById("thumbnail");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+  const closeBtn = document.getElementById("closeBtn");
+
+  thumbnail.addEventListener("click", () => {
+    lightbox.style.display = "block";
+    lightboxImg.src = thumbnail.src;
+  });
+
+  closeBtn.addEventListener("click", () => {
+    lightbox.style.display = "none";
+  });
+
+  window.addEventListener("click", (event) => {
+    if (event.target === lightbox) {
+      lightbox.style.display = "none";
+    }
+  });
+
 </script>
+
 </body>
 </html>
