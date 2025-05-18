@@ -112,17 +112,18 @@ form input {
 }
 
 .remember-me {
-  display: flex;
-  align-items: center;
-  margin: 1rem 0;
-  cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+    cursor: pointer;
 }
 
 .remember-me input {
-  margin-right: 0.5rem;
-  width: auto;
+    margin-right: 0.5rem;
+    width: auto;
 }
 
 .remember-me span {
-  font-size: 0.9rem;
+    font-size: 0.9rem;
+    color: #555;
 }
