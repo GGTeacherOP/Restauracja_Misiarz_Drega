@@ -75,6 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label>Nazwisko: <input type="text" name="nazwisko" required></label><br><br>
             <label>Telefon: <input type="tel" name="telefon" id="telefon" pattern="^\+48-\d{3}-\d{3}-\d{3}$" placeholder="+48-000-000-000" required></label>
             <label>Data: <input type="date" name="data" id="data" required></label><br><br>
+            <div id="godziny"></div><br>
+            <input type="hidden" name="godzina" id="wybranaGodzina" required>
             <label>Ilość osób: <input type="number" name="ilosc_osob" min="1" max="9" required></label><br><br>
             <input type="submit" value="Rezerwuj">
         </form>
@@ -86,6 +88,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <script>
 
+document.getElementById('data').addEventListener('change', function () {
+    const data = this.value;
+    fetch('godziny.php?data=' + data)
+        .then(res => res.json())
+        .then(godziny => {
+            const kontener = document.getElementById('godziny');
+            kontener.innerHTML = '<h3>Dostępne godziny:</h3>';
+            godziny.forEach(item => {
+                const blok = document.createElement('div');
+                blok.className = 'godzina';
+                if (item.status === 'zajeta') {
+                    blok.classList.add('niedostepna');
+                    blok.textContent = item.godzina;
+                } else {
+                    blok.textContent = item.godzina;
+                    blok.style.cursor = 'pointer';
+                    blok.onclick = function () {
+                        document.querySelectorAll('.godzina').forEach(el => el.classList.remove('wybrana'));
+                        blok.classList.add('wybrana');
+                        document.getElementById('wybranaGodzina').value = item.godzina;
+                    };
+                }
+                kontener.appendChild(blok);
+            });
+        });
+});
 
     // Obsługa telefonu - tak jak wcześniej
 
