@@ -64,6 +64,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p>Dla grup liczących 10 lub więcej osób, prosimy o kontakt telefoniczny.</p>
         <h2>Spóźnienia</h2>
         <p>Przestrzeganie godziny rezerwacji jest bardzo ważne. W przypadku spóźnienia powyżej 15 minut, niestety będziemy zmuszeni przekazać zarezerwowany stolik innym gościom.</p>
+        <h2>Rzut z góry restauracji</h2>
+        <p>Kliknij na obrazek, aby go powiększyć i zobaczyć, gdzie znajduje się Twój stolik.</p>
+
+        <img src="stoliki.png" alt="Rzut restauracji z góry" class="plan" id="thumbnail">
+
+        <div id="lightbox" class="lightbox">
+            <span class="close" id="closeBtn">&times;</span>
+            <img class="lightbox-content" id="lightbox-img" alt="Powiększony rzut">
+        </div>
     </div>
 
 </div>
