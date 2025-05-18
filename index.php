@@ -27,9 +27,20 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
             $_SESSION['user_name'] = $user['imie'] . ' ' . $user['nazwisko'];
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_role'] = $user['uprawnienia'];
+            
+           
+            $newToken = bin2hex(random_bytes(32));
+            $newExpiry = time() + 60 * 60 * 24 * 30;
+            
+            $stmt = $pdo->prepare("UPDATE uzytkownicy SET remember_token = ?, token_expiry = ? WHERE id = ?");
+            $stmt->execute([$newToken, date('Y-m-d H:i:s', $newExpiry), $user['id']]);
+            
+            setcookie('remember_token', $newToken, $newExpiry, '/', '', true, true);
+        } else {
+          
+            setcookie('remember_token', '', time() - 3600, '/');
         }
     } catch (PDOException $e) {
-       
         error_log("Auto-login error: " . $e->getMessage());
     }
 }
