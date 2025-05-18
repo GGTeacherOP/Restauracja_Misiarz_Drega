@@ -2,7 +2,7 @@
 $host = 'localhost';
 $db   = 'restauracja';
 $user = 'root'; 
-$pass = '';     // Upewnij się że to poprawne hasło
+$pass = '';    
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
