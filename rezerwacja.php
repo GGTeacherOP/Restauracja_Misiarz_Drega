@@ -155,6 +155,13 @@ telefonInput.addEventListener('input', function () {
     this.setSelectionRange(cursorPos, cursorPos);
 });
 
+document.getElementById('rezerwacjaForm').addEventListener('submit', function(e) {
+    const godzinaVal = document.getElementById('wybranaGodzina').value;
+    if (!godzinaVal) {
+        alert('Proszę wybrać godzinę rezerwacji.');
+        e.preventDefault();
+    }
+});
 
 </script>
 </body>
