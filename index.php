@@ -120,13 +120,41 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     </div>
   </section>
 
-  <section id="opinie">
-    <h2>Opinie</h2>
-    <div class="opinie-container">
-        
-        <?php
-        ?>
-    </div>
+<section id="opinie">
+  <h1>Opinie</h1>
+  <div class="opinie-container">
+    <?php
+    $conn = new mysqli("localhost", "root", "", "restauracja");
+
+    if ($conn->connect_error) {
+      echo "<p>Błąd połączenia z bazą danych.</p>";
+    } else {
+      $sql = "SELECT imie, tresc, data_dodania FROM opinie ORDER BY id DESC LIMIT 10";
+      $result = $conn->query($sql);
+
+      if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+          echo '<div class="opinie-item">';
+          echo '<img src="https://ufrsante.uidt.sn/wp-content/uploads/2023/09/default-avatar-profile-icon-vector-social-media-user-photo-700-205577532.jpg" alt="Avatar" />';
+          echo '<div class="user-comment">';
+          echo '<strong>' . htmlspecialchars($row["imie"]) . '</strong>';
+          echo '<blockquote>' . htmlspecialchars($row["tresc"]) . '</blockquote>';
+          echo '<small style="color:gray;">Dodano: ' . date("d.m.Y", strtotime($row["data_dodania"])) . '</small>';
+          echo '</div>';
+          echo '</div>';
+        }
+      } else {
+        echo "<p>Brak jeszcze opinii.</p>";
+      }
+
+      $conn->close();
+    }
+    ?>
+  </div>
+  <div class="link-opinia">
+    <a href="dodaj_opinie.php">➕ Dodaj swoją opinię</a>
+  </div>
+</section>
     
     <?php if (isset($_SESSION['user_id'])): ?>
     <div class="dodaj-opinie">
