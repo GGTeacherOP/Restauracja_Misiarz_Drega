@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';
 $db   = 'restauracja';
-$user = 'root';
-$pass = '';
+$user = 'root'; 
+$pass = '';     // Upewnij się że to poprawne hasło
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -12,9 +12,5 @@ $options = [
     PDO::ATTR_EMULATE_PREPARES => false,
 ];
 
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (PDOException $e) {
-    die("Błąd połączenia: " . $e->getMessage());
-}
+$pdo = new PDO($dsn, $user, $pass, $options);
 ?>

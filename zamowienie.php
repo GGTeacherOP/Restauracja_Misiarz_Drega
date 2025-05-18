@@ -51,7 +51,7 @@ if (!isset($_SESSION['user_id'])) {
       <button type="submit">Złóż Zamówienie</button>
     </form>
 
-    <a href="index.html" class="back-link">← Powrót do strony głównej</a>
+   <a href="index.php" class="back-link">← Powrót do strony głównej</a>
   </div>
 </body>
 </html>
