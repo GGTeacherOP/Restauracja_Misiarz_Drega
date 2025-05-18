@@ -281,6 +281,30 @@ h1 {
   height: 40px;
 }
 
+.link-opinia {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.link-opinia a {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  border: 2px solid #333;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+.link-opinia a:hover {
+  background-color: #333;
+  color: #fff;
+  cursor: pointer;
+}
+
 .user-comment {
   display: flex;
   flex-direction: column;
