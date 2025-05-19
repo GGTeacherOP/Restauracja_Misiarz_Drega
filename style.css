@@ -259,7 +259,7 @@ h1 {
 }
 
 .opinie-container {
-  max-height: 300px;
+  max-height: 400px;
   overflow-y: auto;
   border: 1px solid #ccc;
   padding: 20px;

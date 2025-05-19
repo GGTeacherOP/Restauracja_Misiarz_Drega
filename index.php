@@ -151,44 +151,30 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     }
     ?>
   </div>
-  <div class="link-opinia">
-    <a href="dodaj_opinie.php">➕ Dodaj swoją opinię</a>
-  </div>
-</section>
-    
     <?php if (isset($_SESSION['user_id'])): ?>
-    <div class="dodaj-opinie">
-        <h3>Dodaj swoją opinię</h3>
-        <form action="dodaj_opinie.php" method="post">
-            <textarea name="tresc" placeholder="Twoja opinia" required></textarea>
-            <select name="ocena" required>
-                <option value="">Wybierz ocenę</option>
-                <option value="5">5 - Doskonałe</option>
-                <option value="4">4 - Bardzo dobre</option>
-                <option value="3">3 - Dobre</option>
-                <option value="2">2 - Średnie</option>
-                <option value="1">1 - Słabe</option>
-            </select>
-            <button type="submit">Wyślij opinię</button>
-        </form>
-    </div>
+      <div class="link-opinia">
+        <a href="dodaj_opinie.php">➕ Dodaj swoją opinię</a>
+      </div>
     <?php else: ?>
-    <p>Aby dodać opinię, <a href="login.html?redirect=index.html#opinie">zaloguj się</a>.</p>
+        <p>Aby dodać opinię, <a href="login.php?redirect=index.php#opinie">zaloguj się</a>.</p>
     <?php endif; ?>
-</section> 
+</section>
 
   <section id="kontakt">
-    <h1>Masz pytania? Napisz do nas</h1>
-    <form action="#" method="post">
-      <input type="text" name="name" placeholder="Twoje imię" required>
-      <input type="email" name="email" placeholder="Twój email" required>
-      <textarea name="message" placeholder="Zadaj pytanie do restauracji" required></textarea>
-      <button type="submit">Wyślij</button>
-    </form>
-    <div class="map">
+  <h1>Masz pytania? Napisz do nas</h1>
+
+  <form action="kontakt.php" method="post">
+    <input type="text" name="name" placeholder="Twoje imię" required>
+    <input type="email" name="email" placeholder="Twój email" required>
+    <textarea name="message" placeholder="Zadaj pytanie do restauracji" required></textarea>
+    <button type="submit">Wyślij</button>
+  </form>
+
+  <div class="map">
       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2442.234175297988!2d21.00567821579256!3d52.25189567976538!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecd76fcb419a5%3A0xd177e5a6c30d0fc!2sUlica+Kwiatowa+12%2C+Warszawa!5e0!3m2!1spl!2spl!4v1680000000000!5m2!1spl!2spl" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-    </div>
-  </section>
+  </div>
+</section>
+
   </main> 
 
   <footer>
@@ -240,6 +226,45 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
       popup.classList.remove('show');
     }
   });
+
+  document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector('form[action="kontakt.php"]');
+
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      let errors = [];
+
+      if (name === "") {
+        errors.push("Imię jest wymagane.");
+      }
+
+      if (!emailRegex.test(email)) {
+        errors.push("Wprowadź poprawny adres e-mail.");
+      }
+
+      if (message === "") {
+        errors.push("Treść wiadomości jest wymagana.");
+      }
+
+      if (errors.length > 0) {
+        e.preventDefault(); // Zatrzymaj wysyłanie formularza
+        alert(errors.join("\n"));
+      }
+    });
+  }
+
+  // 🔔 Alert po przesłaniu formularza
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("success") === "1") {
+    alert("Twoje pytanie zostanie rozpatrzone, a odpowiedź wysłana na email.");
+    history.replaceState(null, "", window.location.pathname + "#kontakt");
+  }
+});
 </script>
 
 </body>
