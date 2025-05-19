@@ -1,0 +1,430 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  color: #2c2c2c;
+  background-color: #fefefe;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+}
+
+header.hero {
+  background-image: url('hero.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header.hero .overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 2rem;
+  text-align: center;
+  color: white;
+}
+
+header.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.btn {
+  padding: 1rem 2rem;
+  background-color: #ff5722;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #e64a19;
+}
+
+nav {
+  background-color: #b52d22;
+  padding: 1rem;
+  text-align: center;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+nav li {
+  display: inline;
+  margin: 0 15px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-bar {
+  position: relative;
+  background-color: #b52d22;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-button {
+  position: absolute;
+  right: 2rem;
+  background-color: #ffffff;
+  color: #b52d22;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transform: translateY(-15px);
+}
+
+.login-button:hover {
+  background-color: #f0f0f0;
+}
+
+section {
+  padding: 4rem 2rem;
+  text-align: center;
+  background-color: #fff8f2;
+}
+
+h1 {
+  color: #b52d22;
+  margin-bottom: 1.5rem;
+  font-size: 45px;
+}
+
+.about-section {
+  background-image: url('https://pracabezszefa.pl/wp-content/uploads/2019/08/restauracja.jpg');
+  background-size: 75% auto; 
+  background-repeat: no-repeat;
+  background-position: center top;
+  padding: 80px 20px;
+  color: #fff;
+  position: relative;
+}
+
+.about-overlay {
+  background-color: rgba(0, 0, 0, 0.6); 
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 12px;
+}
+
+.about-overlay h2 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #fff;
+}
+
+.about-overlay p {
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+.promo-box {
+  background-color: #ffe8cc;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.promo-box:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.promo-box-extra {
+  background-color: #e6f2ff;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.promo-box-extra:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.gallery {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.gallery img {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.miniatura {
+  width: 150px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.miniatura:hover {
+  transform: scale(1.05);
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.popup img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+}
+
+.popup.show {
+  display: flex;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 40px;
+  color: white;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+#opinie blockquote {
+  font-style: italic;
+  background-color: #fff2ed;
+  border-left: 5px solid #b52d22;
+  padding: 1rem 1.5rem;
+  margin: 1rem auto;
+  max-width: 600px;
+  border-radius: 8px;
+  color: #333;
+}
+
+.opinie-container {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 20px;
+  background-color: #fafafa;
+  max-width: 90%;
+  margin: 0 auto;
+  text-align: left; 
+  box-sizing: border-box;
+}
+
+.opinie-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.opinie-item img {
+  height: 40px;
+}
+
+.link-opinia {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.link-opinia a {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  border: 2px solid #333;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+.link-opinia a:hover {
+  background-color: #333;
+  color: #fff;
+  cursor: pointer;
+}
+
+.user-comment {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-comment strong {
+  margin-bottom: 5px;
+  font-size: 1rem;
+  color: #b52d22;
+}
+
+form {
+  max-width: 600px;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+form input,
+form textarea {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fafafa;
+}
+form button {
+  padding: 1rem;
+  border: none;
+  background-color: #b52d22;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+form button:hover {
+  background-color: #9e261c;
+}
+
+footer {
+  background-color: #2c2c2c;
+  color: white;
+
+  width: 100%;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+}
+
+.footer-section {
+  max-width: 300px;
+  margin: 1rem;
+}
+
+.footer-section h4 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #ffab91;
+}
+
+.footer-section p {
+  margin: 0.3rem 0;
+}
+
+.socials a {
+  margin-right: 1rem;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.socials a:hover {
+  transform: scale(1.2);
+}
+
+.socials img {
+  width: 24px;
+  height: 24px;
+}
+
+footer .copyright {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.user-menu {
+  position: absolute;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-menu span {
+  color: white;
+  font-weight: bold;
+}
+
+.logout-button {
+  background-color: #ffffff;
+  color: #b52d22;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.logout-button:hover {
+  background-color: #f0f0f0;
+}

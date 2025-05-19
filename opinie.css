@@ -1,0 +1,75 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f8f8;
+  margin: 0;
+  padding: 40px;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #222;
+  margin-bottom: 30px;
+}
+
+.formularz-opinia {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 25px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.formularz-opinia label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.formularz-opinia input[type="text"],
+.formularz-opinia textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.formularz-opinia input[type="text"]:focus,
+.formularz-opinia textarea:focus {
+  border-color: #666;
+  outline: none;
+}
+
+.formularz-opinia button {
+  background-color: #b52d22;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.formularz-opinia button:hover {
+  background-color: #9e261c;
+}
+
+p {
+  text-align: center;
+  margin-top: 20px;
+}
+
+a {
+  color: #a01a1a;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
