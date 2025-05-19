@@ -161,17 +161,20 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
 </section>
 
   <section id="kontakt">
-    <h1>Masz pytania? Napisz do nas</h1>
-    <form action="#" method="post">
-      <input type="text" name="name" placeholder="Twoje imię" required>
-      <input type="email" name="email" placeholder="Twój email" required>
-      <textarea name="message" placeholder="Zadaj pytanie do restauracji" required></textarea>
-      <button type="submit">Wyślij</button>
-    </form>
-    <div class="map">
+  <h1>Masz pytania? Napisz do nas</h1>
+
+  <form action="kontakt.php" method="post">
+    <input type="text" name="name" placeholder="Twoje imię" required>
+    <input type="email" name="email" placeholder="Twój email" required>
+    <textarea name="message" placeholder="Zadaj pytanie do restauracji" required></textarea>
+    <button type="submit">Wyślij</button>
+  </form>
+
+  <div class="map">
       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2442.234175297988!2d21.00567821579256!3d52.25189567976538!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecd76fcb419a5%3A0xd177e5a6c30d0fc!2sUlica+Kwiatowa+12%2C+Warszawa!5e0!3m2!1spl!2spl!4v1680000000000!5m2!1spl!2spl" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-    </div>
-  </section>
+  </div>
+</section>
+
   </main> 
 
   <footer>
@@ -223,6 +226,8 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
       popup.classList.remove('show');
     }
   });
+
+
 </script>
 
 </body>
