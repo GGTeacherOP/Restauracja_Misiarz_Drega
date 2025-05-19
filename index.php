@@ -227,7 +227,44 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     }
   });
 
+  document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector('form[action="kontakt.php"]');
 
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      let errors = [];
+
+      if (name === "") {
+        errors.push("Imię jest wymagane.");
+      }
+
+      if (!emailRegex.test(email)) {
+        errors.push("Wprowadź poprawny adres e-mail.");
+      }
+
+      if (message === "") {
+        errors.push("Treść wiadomości jest wymagana.");
+      }
+
+      if (errors.length > 0) {
+        e.preventDefault(); // Zatrzymaj wysyłanie formularza
+        alert(errors.join("\n"));
+      }
+    });
+  }
+
+  // 🔔 Alert po przesłaniu formularza
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("success") === "1") {
+    alert("Twoje pytanie zostanie rozpatrzone, a odpowiedź wysłana na email.");
+    history.replaceState(null, "", window.location.pathname + "#kontakt");
+  }
+});
 </script>
 
 </body>
