@@ -151,31 +151,14 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     }
     ?>
   </div>
-  <div class="link-opinia">
-    <a href="dodaj_opinie.php">➕ Dodaj swoją opinię</a>
-  </div>
-</section>
-    
     <?php if (isset($_SESSION['user_id'])): ?>
-    <div class="dodaj-opinie">
-        <h3>Dodaj swoją opinię</h3>
-        <form action="dodaj_opinie.php" method="post">
-            <textarea name="tresc" placeholder="Twoja opinia" required></textarea>
-            <select name="ocena" required>
-                <option value="">Wybierz ocenę</option>
-                <option value="5">5 - Doskonałe</option>
-                <option value="4">4 - Bardzo dobre</option>
-                <option value="3">3 - Dobre</option>
-                <option value="2">2 - Średnie</option>
-                <option value="1">1 - Słabe</option>
-            </select>
-            <button type="submit">Wyślij opinię</button>
-        </form>
-    </div>
+      <div class="link-opinia">
+        <a href="dodaj_opinie.php">➕ Dodaj swoją opinię</a>
+      </div>
     <?php else: ?>
-    <p>Aby dodać opinię, <a href="login.html?redirect=index.html#opinie">zaloguj się</a>.</p>
+        <p>Aby dodać opinię, <a href="login.php?redirect=index.php#opinie">zaloguj się</a>.</p>
     <?php endif; ?>
-</section> 
+</section>
 
   <section id="kontakt">
     <h1>Masz pytania? Napisz do nas</h1>
