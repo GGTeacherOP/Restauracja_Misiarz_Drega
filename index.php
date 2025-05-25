@@ -65,6 +65,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
         <li><a href="#galeria">Galeria</a></li>
         <li><a href="#opinie">Opinie</a></li>
         <li><a href="#kontakt">Kontakt</a></li>
+        <li><a href="rezerwacja.php">Rezerwacja</a></li>
     </ul>
     <?php if (isset($_SESSION['user_id'])): ?>
 <div class="user-menu">
@@ -148,7 +149,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     if ($conn->connect_error) {
       echo "<p>Błąd połączenia z bazą danych.</p>";
     } else {
-      $sql = "SELECT imie, tresc, data_dodania FROM opinie ORDER BY id DESC LIMIT 10";
+      $sql = "SELECT nazwa_uzytkownika, tresc, data_dodania FROM opinie ORDER BY id DESC LIMIT 10";
       $result = $conn->query($sql);
 
       if ($result->num_rows > 0) {
@@ -156,7 +157,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
           echo '<div class="opinie-item">';
           echo '<img src="https://ufrsante.uidt.sn/wp-content/uploads/2023/09/default-avatar-profile-icon-vector-social-media-user-photo-700-205577532.jpg" alt="Avatar" />';
           echo '<div class="user-comment">';
-          echo '<strong>' . htmlspecialchars($row["imie"]) . '</strong>';
+          echo '<strong>' . htmlspecialchars($row["nazwa_uzytkownika"]) . '</strong>';
           echo '<blockquote>' . htmlspecialchars($row["tresc"]) . '</blockquote>';
           echo '<small style="color:gray;">Dodano: ' . date("d.m.Y", strtotime($row["data_dodania"])) . '</small>';
           echo '</div>';
@@ -175,7 +176,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
         <a href="dodaj_opinie.php">➕ Dodaj swoją opinię</a>
       </div>
     <?php else: ?>
-        <p>Aby dodać opinię, <a href="login.php?redirect=index.php#opinie">zaloguj się</a>.</p>
+        <p class="logowanie-opinia">Aby dodać opinię, <a href="login.php?redirect=index.php#opinie">zaloguj się</a>.</p>
     <?php endif; ?>
 </section>
 
