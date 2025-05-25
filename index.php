@@ -59,22 +59,25 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
 ?>
   <nav class="nav-bar">
     <ul class="nav-links">
-      <li><a href="menu.php">Menu</a></li>
-      <li><a href="#onas">O nas</a></li>
-      <li><a href="#promocje">Promocje</a></li>
-      <li><a href="#galeria">Galeria</a></li>
-      <li><a href="#opinie">Opinie</a></li>
-      <li><a href="#kontakt">Kontakt</a></li>
+        <li><a href="menu.php">Menu</a></li>
+        <li><a href="#onas">O nas</a></li>
+        <li><a href="#promocje">Promocje</a></li>
+        <li><a href="#galeria">Galeria</a></li>
+        <li><a href="#opinie">Opinie</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
     </ul>
     <?php if (isset($_SESSION['user_id'])): ?>
     <div class="user-menu">
         <span>Witaj, <?= htmlspecialchars($_SESSION['user_name']) ?></span>
+        <?php if ($_SESSION['user_role'] === 'admin'): ?>
+            <a href="admin_panel.php" class="admin-button">Panel Admina</a>
+        <?php endif; ?>
         <a href="logout.php" class="logout-button">Wyloguj</a>
     </div>
-<?php else: ?>
-    <a href="login.php"><button class="login-button">Zaloguj się</button></a>
-<?php endif; ?>
-  </nav>
+    <?php else: ?>
+        <a href="login.php"><button class="login-button">Zaloguj się</button></a>
+    <?php endif; ?>
+</nav>
 
   <header class="hero">
   <div class="overlay">
