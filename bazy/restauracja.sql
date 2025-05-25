@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 25, 2025 at 03:27 PM
--- Wersja serwera: 10.4.28-MariaDB
--- Wersja PHP: 8.2.4
+-- Generation Time: Maj 25, 2025 at 08:11 PM
+-- Wersja serwera: 10.4.32-MariaDB
+-- Wersja PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `opinie` (
   `id` int(11) NOT NULL,
   `uzytkownik_id` int(11) DEFAULT NULL,
-  `imie` varchar(100) DEFAULT NULL,
+  `nazwa_uzytkownika` varchar(255) DEFAULT NULL,
   `tresc` text DEFAULT NULL,
   `data_dodania` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -39,11 +39,12 @@ CREATE TABLE `opinie` (
 -- Dumping data for table `opinie`
 --
 
-INSERT INTO `opinie` (`id`, `uzytkownik_id`, `imie`, `tresc`, `data_dodania`) VALUES
+INSERT INTO `opinie` (`id`, `uzytkownik_id`, `nazwa_uzytkownika`, `tresc`, `data_dodania`) VALUES
 (1, NULL, 'Ewa', 'Polecam.', '2025-05-18 23:13:33'),
 (2, NULL, 'Marek', 'Rewelacyjne miejsce! Jedzenie przepyszne, obsługa bardzo miła i pomocna. Zdecydowanie polecam', '2025-05-18 23:23:32'),
 (3, NULL, 'Janek', 'Fajna restauracja', '2025-05-19 00:13:32'),
-(5, NULL, 'Dominik', 'Cudowne miejsce! Jedzenie przepyszne, obsługa bardzo miła i pomocna. Zdecydowanie polecam! UwU', '2025-05-19 22:09:26');
+(14, 9, 'AndrejKwiatek', 'Super miejsce polecam!', '2025-05-25 19:58:51'),
+(15, 9, 'AndrejKwiatek', 'Bardzo fajnie', '2025-05-25 20:06:08');
 
 -- --------------------------------------------------------
 
@@ -101,7 +102,9 @@ CREATE TABLE `pytania` (
 INSERT INTO `pytania` (`id`, `uzytkownik_id`, `imie`, `email`, `tresc`, `data_dodania`) VALUES
 (1, 9, 'Ewa', 'ewanowak@gmail.com', 'Jakie są godziny otwarcia?', '2025-05-20 01:02:20'),
 (2, 9, 'Ewa', 'ewanowak@gmail.com', 'Czy jest możliwość organizacji przyjęć?', '2025-05-20 01:13:06'),
-(3, 9, 'Jan', 'jan_kowalski12@gmail.com', 'Jaki jest numer kontaktowy?', '2025-05-20 01:16:15');
+(3, 9, 'Jan', 'jan_kowalski12@gmail.com', 'Jaki jest numer kontaktowy?', '2025-05-20 01:16:15'),
+(5, 9, 'Andrzej', 'and.kwiatek@gmail.com', 'Jakie są godziny otwarcia?', '2025-05-25 20:01:33'),
+(10, 9, 'Andrzej', 'and.kwiatek@gmail.com', 'Czy organizujecie przyjęcia?', '2025-05-25 20:05:21');
 
 -- --------------------------------------------------------
 
@@ -200,12 +203,24 @@ INSERT INTO `zamowienia` (`id`, `imie_nazwisko`, `telefon`, `adres`, `dania`, `c
 --
 
 --
+-- Indeksy dla tabeli `opinie`
+--
+ALTER TABLE `opinie`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeksy dla tabeli `pracownicy`
 --
 ALTER TABLE `pracownicy`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`),
   ADD KEY `fk_pracownik_uzytkownik` (`uzytkownik_id`);
+
+--
+-- Indeksy dla tabeli `pytania`
+--
+ALTER TABLE `pytania`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indeksy dla tabeli `rezerwacje`
@@ -233,22 +248,34 @@ ALTER TABLE `zamowienia`
 --
 
 --
+-- AUTO_INCREMENT for table `opinie`
+--
+ALTER TABLE `opinie`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
 -- AUTO_INCREMENT for table `pracownicy`
 --
 ALTER TABLE `pracownicy`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT for table `pytania`
+--
+ALTER TABLE `pytania`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT for table `rezerwacje`
 --
 ALTER TABLE `rezerwacje`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `uzytkownicy`
 --
 ALTER TABLE `uzytkownicy`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `zamowienia`
