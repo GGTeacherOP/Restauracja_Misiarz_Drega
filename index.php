@@ -282,12 +282,6 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     history.replaceState(null, "", window.location.pathname + "#kontakt");
   }
 });
-window.onclick = function(event) {
-  const modal = document.getElementById('loginModal');
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
 </script>
 
 </body>
