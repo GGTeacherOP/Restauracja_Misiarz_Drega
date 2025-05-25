@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 25, 2025 at 03:27 PM
--- Wersja serwera: 10.4.28-MariaDB
--- Wersja PHP: 8.2.4
+-- Generation Time: Maj 25, 2025 at 09:01 PM
+-- Wersja serwera: 10.4.32-MariaDB
+-- Wersja PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -117,23 +117,24 @@ CREATE TABLE `rezerwacje` (
   `data` date NOT NULL,
   `godzina` time NOT NULL,
   `ilosc_osob` int(11) NOT NULL,
-  `stolik_nr` int(11) NOT NULL
+  `stolik_nr` int(11) NOT NULL,
+  `uzytkownik_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `rezerwacje`
 --
 
-INSERT INTO `rezerwacje` (`id`, `imie`, `nazwisko`, `telefon`, `data`, `godzina`, `ilosc_osob`, `stolik_nr`) VALUES
-(1, 'Anna', 'Kowalska', '+48-123-456-789', '2025-05-12', '18:00:00', 2, 5),
-(2, 'Jan', 'Nowak', '+48-987-654-321', '2025-05-12', '19:30:00', 4, 3),
-(3, 'Piotr', 'Zieliński', '+48-555-333-222', '2025-05-13', '20:00:00', 6, 7),
-(4, 'Maria', 'Wiśniewska', '+48-111-222-333', '2025-05-14', '17:00:00', 2, 1),
-(5, 'Tomasz', 'Kaczmarek', '+48-444-555-666', '2025-05-14', '18:30:00', 3, 4),
-(6, 'Karolina', 'Mazur', '+48-222-333-444', '2025-05-15', '19:00:00', 5, 6),
-(7, 'Michał', 'Dąbrowski', '+48-666-777-888', '2025-05-15', '20:30:00', 2, 2),
-(8, 'Ewa', 'Lewandowska', '+48-999-000-111', '2025-05-16', '18:15:00', 1, 8),
-(9, 'Robert', 'Wójcik', '+48-888-999-000', '2025-05-16', '21:00:00', 4, 9);
+INSERT INTO `rezerwacje` (`id`, `imie`, `nazwisko`, `telefon`, `data`, `godzina`, `ilosc_osob`, `stolik_nr`, `uzytkownik_id`) VALUES
+(1, 'Anna', 'Kowalska', '+48-123-456-789', '2025-05-12', '18:00:00', 2, 5, NULL),
+(2, 'Jan', 'Nowak', '+48-987-654-321', '2025-05-12', '19:30:00', 4, 3, NULL),
+(3, 'Piotr', 'Zieliński', '+48-555-333-222', '2025-05-13', '20:00:00', 6, 7, NULL),
+(4, 'Maria', 'Wiśniewska', '+48-111-222-333', '2025-05-14', '17:00:00', 2, 1, NULL),
+(5, 'Tomasz', 'Kaczmarek', '+48-444-555-666', '2025-05-14', '18:30:00', 3, 4, NULL),
+(6, 'Karolina', 'Mazur', '+48-222-333-444', '2025-05-15', '19:00:00', 5, 6, NULL),
+(7, 'Michał', 'Dąbrowski', '+48-666-777-888', '2025-05-15', '20:30:00', 2, 2, NULL),
+(8, 'Ewa', 'Lewandowska', '+48-999-000-111', '2025-05-16', '18:15:00', 1, 8, NULL),
+(9, 'Robert', 'Wójcik', '+48-888-999-000', '2025-05-16', '21:00:00', 4, 9, NULL);
 
 -- --------------------------------------------------------
 
@@ -200,6 +201,12 @@ INSERT INTO `zamowienia` (`id`, `imie_nazwisko`, `telefon`, `adres`, `dania`, `c
 --
 
 --
+-- Indeksy dla tabeli `opinie`
+--
+ALTER TABLE `opinie`
+  ADD KEY `fk_opinie_uzytkownik` (`uzytkownik_id`);
+
+--
 -- Indeksy dla tabeli `pracownicy`
 --
 ALTER TABLE `pracownicy`
@@ -208,10 +215,17 @@ ALTER TABLE `pracownicy`
   ADD KEY `fk_pracownik_uzytkownik` (`uzytkownik_id`);
 
 --
+-- Indeksy dla tabeli `pytania`
+--
+ALTER TABLE `pytania`
+  ADD KEY `fk_pytania_uzytkownik` (`uzytkownik_id`);
+
+--
 -- Indeksy dla tabeli `rezerwacje`
 --
 ALTER TABLE `rezerwacje`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_rezerwacje_uzytkownik` (`uzytkownik_id`);
 
 --
 -- Indeksy dla tabeli `uzytkownicy`
@@ -261,15 +275,35 @@ ALTER TABLE `zamowienia`
 --
 
 --
+-- Constraints for table `opinie`
+--
+ALTER TABLE `opinie`
+  ADD CONSTRAINT `fk_opinie_uzytkownik` FOREIGN KEY (`uzytkownik_id`) REFERENCES `uzytkownicy` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `pracownicy`
 --
 ALTER TABLE `pracownicy`
+  ADD CONSTRAINT `fk_pracownicy_uzytkownik` FOREIGN KEY (`uzytkownik_id`) REFERENCES `uzytkownicy` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_pracownik_uzytkownik` FOREIGN KEY (`uzytkownik_id`) REFERENCES `uzytkownicy` (`id`);
+
+--
+-- Constraints for table `pytania`
+--
+ALTER TABLE `pytania`
+  ADD CONSTRAINT `fk_pytania_uzytkownik` FOREIGN KEY (`uzytkownik_id`) REFERENCES `uzytkownicy` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `rezerwacje`
+--
+ALTER TABLE `rezerwacje`
+  ADD CONSTRAINT `fk_rezerwacje_uzytkownik` FOREIGN KEY (`uzytkownik_id`) REFERENCES `uzytkownicy` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `zamowienia`
 --
 ALTER TABLE `zamowienia`
+  ADD CONSTRAINT `fk_zamowienia_uzytkownik` FOREIGN KEY (`user_id`) REFERENCES `uzytkownicy` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `zamowienia_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `uzytkownicy` (`id`);
 COMMIT;
 
