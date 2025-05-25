@@ -2,48 +2,64 @@
 session_start();
 require_once 'db_config.php';
 
+// Sprawdź czy użytkownik jest zalogowany i ma uprawnienia admina lub właściciela
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
 
-if ($_SESSION['user_role'] !== 'admin') {
+if ($_SESSION['user_role'] !== 'admin' && $_SESSION['user_role'] !== 'wlasciciel') {
     header('Location: index.php');
     exit;
 }
+
+// Funkcje dostępne tylko dla właściciela
+$isOwner = ($_SESSION['user_role'] === 'wlasciciel');
+
+// Obsługa akcji admina/właściciela
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['delete_user'])) {
+    // Usuwanie użytkowników (tylko właściciel)
+    if ($isOwner && isset($_POST['delete_user'])) {
         $userId = $_POST['user_id'];
         $stmt = $pdo->prepare("DELETE FROM uzytkownicy WHERE id = ?");
         $stmt->execute([$userId]);
     }
     
+    // Zarządzanie rezerwacjami
     if (isset($_POST['delete_reservation'])) {
         $reservationId = $_POST['reservation_id'];
         $stmt = $pdo->prepare("DELETE FROM rezerwacje WHERE id = ?");
         $stmt->execute([$reservationId]);
     }
     
+    // Zarządzanie opiniami
     if (isset($_POST['delete_opinion'])) {
         $opinionId = $_POST['opinion_id'];
         $stmt = $pdo->prepare("DELETE FROM opinie WHERE id = ?");
         $stmt->execute([$opinionId]);
     }
     
+    // Zarządzanie pytaniami
     if (isset($_POST['delete_question'])) {
         $questionId = $_POST['question_id'];
         $stmt = $pdo->prepare("DELETE FROM pytania WHERE id = ?");
         $stmt->execute([$questionId]);
     }
+    
+    // Awansowanie na admina (tylko właściciel)
+    if ($isOwner && isset($_POST['promote_to_admin'])) {
+        $userId = $_POST['user_id'];
+        $stmt = $pdo->prepare("UPDATE uzytkownicy SET uprawnienia = 'admin' WHERE id = ?");
+        $stmt->execute([$userId]);
+    }
 }
 
-
+// Pobierz dane do wyświetlenia
 $users = $pdo->query("SELECT * FROM uzytkownicy")->fetchAll();
 $reservations = $pdo->query("SELECT * FROM rezerwacje")->fetchAll();
 $opinions = $pdo->query("SELECT * FROM opinie")->fetchAll();
 $questions = $pdo->query("SELECT * FROM pytania")->fetchAll();
 ?>
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -53,16 +69,17 @@ $questions = $pdo->query("SELECT * FROM pytania")->fetchAll();
     <link rel="stylesheet" href="admin_panel.css" />
 </head>
 <body>
-    <div class="header">
+   <div class="header">
         <div class="container">
-            <h1>Panel Admina</h1>
-            <p>Zalogowany jako: <?= htmlspecialchars($_SESSION['user_name']) ?></p>
+            <h1><?= $isOwner ? 'Panel Właściciela' : 'Panel Admina' ?></h1>
+            <p>Zalogowany jako: <?= htmlspecialchars($_SESSION['user_name']) ?> (<?= htmlspecialchars($_SESSION['user_role']) ?>)</p>
         </div>
     </div>
 
     <div class="container">
-        <div class="section">
-            <h2>Użytkownicy</h2>
+        <?php if ($isOwner): ?>
+        <div class="section owner-only">
+            <h2>Zarządzanie Użytkownikami</h2>
             <table>
                 <thead>
                     <tr>
@@ -83,9 +100,17 @@ $questions = $pdo->query("SELECT * FROM pytania")->fetchAll();
                         <td><?= htmlspecialchars($user['email']) ?></td>
                         <td><?= htmlspecialchars($user['uprawnienia']) ?></td>
                         <td>
+                            <?php if ($user['uprawnienia'] === 'uzytkownik'): ?>
                             <form method="POST" style="display:inline;">
                                 <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-                                <button type="submit" name="delete_user" class="btn">Usuń</button>
+                                <button type="submit" name="promote_to_admin" class="btn promote-btn">Awansuj na admina</button>
+                            </form>
+                            <?php endif; ?>
+                            
+                            <form method="POST" style="display:inline;">
+                                <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                                <button type="submit" name="delete_user" class="btn" 
+                                    onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?')">Usuń</button>
                             </form>
                         </td>
                     </tr>
@@ -93,6 +118,7 @@ $questions = $pdo->query("SELECT * FROM pytania")->fetchAll();
                 </tbody>
             </table>
         </div>
+        <?php endif; ?>
 
         <div class="section">
             <h2>Rezerwacje</h2>

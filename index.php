@@ -67,13 +67,15 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
         <li><a href="#kontakt">Kontakt</a></li>
     </ul>
     <?php if (isset($_SESSION['user_id'])): ?>
-    <div class="user-menu">
-        <span>Witaj, <?= htmlspecialchars($_SESSION['user_name']) ?></span>
-        <?php if ($_SESSION['user_role'] === 'admin'): ?>
-            <a href="admin_panel.php" class="admin-button">Panel Admina</a>
-        <?php endif; ?>
-        <a href="logout.php" class="logout-button">Wyloguj</a>
-    </div>
+<div class="user-menu">
+    <span>Witaj, <?= htmlspecialchars($_SESSION['user_name']) ?></span>
+    <?php if ($_SESSION['user_role'] === 'admin' || $_SESSION['user_role'] === 'wlasciciel'): ?>
+        <a href="admin_dashboard.php" class="admin-button">
+            <?= $_SESSION['user_role'] === 'wlasciciel' ? 'Panel Właściciela' : 'Panel Admina' ?>
+        </a>
+    <?php endif; ?>
+    <a href="logout.php" class="logout-button">Wyloguj</a>
+</div>
     <?php else: ?>
         <a href="login.php"><button class="login-button">Zaloguj się</button></a>
     <?php endif; ?>
