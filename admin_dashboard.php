@@ -2,7 +2,7 @@
 session_start();
 require_once 'db_config.php';
 
-// Sprawdź czy użytkownik jest zalogowany i ma uprawnienia admina lub właściciela
+
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
@@ -13,48 +13,56 @@ if ($_SESSION['user_role'] !== 'admin' && $_SESSION['user_role'] !== 'wlasciciel
     exit;
 }
 
-// Funkcje dostępne tylko dla właściciela
+
 $isOwner = ($_SESSION['user_role'] === 'wlasciciel');
 
-// Obsługa akcji admina/właściciela
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Usuwanie użytkowników (tylko właściciel)
+    
     if ($isOwner && isset($_POST['delete_user'])) {
         $userId = $_POST['user_id'];
         $stmt = $pdo->prepare("DELETE FROM uzytkownicy WHERE id = ?");
         $stmt->execute([$userId]);
     }
     
-    // Zarządzanie rezerwacjami
+    
     if (isset($_POST['delete_reservation'])) {
         $reservationId = $_POST['reservation_id'];
         $stmt = $pdo->prepare("DELETE FROM rezerwacje WHERE id = ?");
         $stmt->execute([$reservationId]);
     }
     
-    // Zarządzanie opiniami
+   
     if (isset($_POST['delete_opinion'])) {
         $opinionId = $_POST['opinion_id'];
         $stmt = $pdo->prepare("DELETE FROM opinie WHERE id = ?");
         $stmt->execute([$opinionId]);
     }
     
-    // Zarządzanie pytaniami
+    
     if (isset($_POST['delete_question'])) {
         $questionId = $_POST['question_id'];
         $stmt = $pdo->prepare("DELETE FROM pytania WHERE id = ?");
         $stmt->execute([$questionId]);
     }
     
-    // Awansowanie na admina (tylko właściciel)
+  
     if ($isOwner && isset($_POST['promote_to_admin'])) {
         $userId = $_POST['user_id'];
         $stmt = $pdo->prepare("UPDATE uzytkownicy SET uprawnienia = 'admin' WHERE id = ?");
         $stmt->execute([$userId]);
     }
 }
+if (isset($_POST['delete_pracownik'])) {
+    $pracownikId = $_POST['pracownik_id'];
+    $stmt = $pdo->prepare("DELETE FROM pracownicy WHERE id = ?");
+    $stmt->execute([$pracownikId]);
+    $_SESSION['success_msg'] = "Pracownik został usunięty";
+    header("Location: admin_dashboard.php");
+    exit;
+}
 
-// Pobierz dane do wyświetlenia
+
 $users = $pdo->query("SELECT * FROM uzytkownicy")->fetchAll();
 $reservations = $pdo->query("SELECT * FROM rezerwacje")->fetchAll();
 $opinions = $pdo->query("SELECT * FROM opinie")->fetchAll();
@@ -66,7 +74,7 @@ $questions = $pdo->query("SELECT * FROM pytania")->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Admina</title>
-    <link rel="stylesheet" href="admin_panel.css" />
+    <link rel="stylesheet" href="admin_dashboard.css" />
 </head>
 <body>
    <div class="header">
@@ -218,6 +226,48 @@ $questions = $pdo->query("SELECT * FROM pytania")->fetchAll();
                 </tbody>
             </table>
         </div>
+
+        <div class="section">
+    <h2>Pracownicy</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+                <th>Stanowisko</th>
+                <th>Pensja</th>
+                <th>Kontakt</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+            $pracownicy = $pdo->query("SELECT * FROM pracownicy ORDER BY stanowisko, nazwisko")->fetchAll();
+            foreach ($pracownicy as $pracownik): ?>
+            <tr>
+                <td><?= htmlspecialchars($pracownik['id']) ?></td>
+                <td><?= htmlspecialchars($pracownik['imie']) ?></td>
+                <td><?= htmlspecialchars($pracownik['nazwisko']) ?></td>
+                <td><?= htmlspecialchars($pracownik['stanowisko']) ?></td>
+                <td><?= number_format($pracownik['pensja'], 2, ',', ' ') ?> zł</td>
+                <td>
+                    <?= htmlspecialchars($pracownik['email']) ?><br>
+                    <?= htmlspecialchars($pracownik['telefon']) ?>
+                </td>
+                <td>
+                    <a href="edytuj_pracownika.php?id=<?= $pracownik['id'] ?>" class="btn" style="background-color:#17a2b8;">Edytuj</a>
+                    <form method="POST" style="display:inline;">
+                        <input type="hidden" name="pracownik_id" value="<?= $pracownik['id'] ?>">
+                        <button type="submit" name="delete_pracownik" class="btn" 
+                            onclick="return confirm('Czy na pewno chcesz usunąć tego pracownika?')">Usuń</button>
+                    </form>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 
         <a href="index.php" class="back-btn">Powrót do strony głównej</a>
     </div>
