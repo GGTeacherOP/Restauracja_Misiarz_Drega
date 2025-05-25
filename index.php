@@ -10,6 +10,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div id="loginModal" class="modal">
+  <div class="modal-content">
+    <h2>Wymagane logowanie</h2>
+    <p>Aby złożyć zamówienie, musisz się najpierw zalogować.</p>
+    <div class="modal-buttons">
+      <a href="login.php?redirect=zamowienie.php" class="login-btn">Zaloguj się</a>
+      <a href="#" class="cancel-btn" onclick="document.getElementById('loginModal').style.display='none'">Anuluj</a>
+    </div>
+  </div>
+</div>
   <main>
   <?php
 session_start();
@@ -49,29 +59,46 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
 ?>
   <nav class="nav-bar">
     <ul class="nav-links">
-      <li><a href="menu.php">Menu</a></li>
-      <li><a href="#onas">O nas</a></li>
-      <li><a href="#promocje">Promocje</a></li>
-      <li><a href="#galeria">Galeria</a></li>
-      <li><a href="#opinie">Opinie</a></li>
-      <li><a href="#kontakt">Kontakt</a></li>
+        <li><a href="menu.php">Menu</a></li>
+        <li><a href="#onas">O nas</a></li>
+        <li><a href="#promocje">Promocje</a></li>
+        <li><a href="#galeria">Galeria</a></li>
+        <li><a href="#opinie">Opinie</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+        <li><a href="rezerwacja.php">Rezerwacja</a></li>
     </ul>
-    <?php if (isset($_SESSION['user_id'])): ?>
-    <div class="user-menu">
-        <span>Witaj, <?= htmlspecialchars($_SESSION['user_name']) ?></span>
-        <a href="logout.php" class="logout-button">Wyloguj</a>
-    </div>
+<?php if (isset($_SESSION['user_id'])): ?>
+<div class="user-menu">
+    <span>Witaj, <?= htmlspecialchars($_SESSION['user_name']) ?></span>
+
+    <?php
+    // Pokazuje odpowiedni link panelu w zależności od roli
+    if ($_SESSION['user_role'] === 'wlasciciel'): ?>
+        <a href="wlasciciel_panel.php" class="panel-button">Panel Właściciela</a>
+    <?php elseif ($_SESSION['user_role'] === 'admin'): ?>
+        <a href="admin_dashboard.php" class="panel-button">Panel Admina</a>
+    <?php elseif ($_SESSION['user_role'] === 'obsluga'): ?>
+        <a href="client_service_dashboard.php" class="panel-button">Panel Obsługi Klienta</a>
+    <?php endif; ?>
+
+    <a href="logout.php" class="logout-button">Wyloguj</a>
+</div>
 <?php else: ?>
     <a href="login.php"><button class="login-button">Zaloguj się</button></a>
 <?php endif; ?>
-  </nav>
+
+</nav>
 
   <header class="hero">
-    <div class="overlay">
-      <h1>Poznaj Smak Kraftowych Dań!</h1>
+  <div class="overlay">
+    <h1>Poznaj Smak Kraftowych Dań!</h1>
+    <?php if (isset($_SESSION['user_id'])): ?>
       <a href="zamowienie.php" class="btn">Zamów Online</a>
-    </div>
-  </header>
+    <?php else: ?>
+      <button class="btn" onclick="document.getElementById('loginModal').style.display='block'">Zamów Online</button>
+    <?php endif; ?>
+  </div>
+</header>
 
   <section id="onas">
     <div class="about-section">
@@ -129,7 +156,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     if ($conn->connect_error) {
       echo "<p>Błąd połączenia z bazą danych.</p>";
     } else {
-      $sql = "SELECT imie, tresc, data_dodania FROM opinie ORDER BY id DESC LIMIT 10";
+      $sql = "SELECT nazwa_uzytkownika, tresc, data_dodania FROM opinie ORDER BY id DESC LIMIT 10";
       $result = $conn->query($sql);
 
       if ($result->num_rows > 0) {
@@ -137,7 +164,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
           echo '<div class="opinie-item">';
           echo '<img src="https://ufrsante.uidt.sn/wp-content/uploads/2023/09/default-avatar-profile-icon-vector-social-media-user-photo-700-205577532.jpg" alt="Avatar" />';
           echo '<div class="user-comment">';
-          echo '<strong>' . htmlspecialchars($row["imie"]) . '</strong>';
+          echo '<strong>' . htmlspecialchars($row["nazwa_uzytkownika"]) . '</strong>';
           echo '<blockquote>' . htmlspecialchars($row["tresc"]) . '</blockquote>';
           echo '<small style="color:gray;">Dodano: ' . date("d.m.Y", strtotime($row["data_dodania"])) . '</small>';
           echo '</div>';
@@ -156,7 +183,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
         <a href="dodaj_opinie.php">➕ Dodaj swoją opinię</a>
       </div>
     <?php else: ?>
-        <p>Aby dodać opinię, <a href="login.php?redirect=index.php#opinie">zaloguj się</a>.</p>
+        <p class="logowanie-opinia">Aby dodać opinię, <a href="login.php?redirect=index.php#opinie">zaloguj się</a>.</p>
     <?php endif; ?>
 </section>
 
@@ -268,4 +295,4 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
 </script>
 
 </body>
-</html>
+</html> 

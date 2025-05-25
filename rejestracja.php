@@ -1,98 +1,112 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-session_start();
+$komunikat = ''; // zmienna na komunikat
 
-// Dane do połączenia z bazą danych
-$host = 'localhost';
-$db   = 'restauracja';
-$user = 'root';
-$pass = '';
-$charset = 'utf8mb4';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $conn = new mysqli('localhost', 'root', '', 'restauracja');
+    if ($conn->connect_error) {
+        die("Błąd połączenia z bazą danych: " . $conn->connect_error);
+    }
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES => false,
-];
+    $imie = $conn->real_escape_string($_POST['imie']);
+    $nazwisko = $conn->real_escape_string($_POST['nazwisko']);
+    $nazwa_uzytkownika = $conn->real_escape_string($_POST['nazwa_uzytkownika']);
+    $email = $conn->real_escape_string($_POST['email']);
+    $haslo = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $uprawnienia = 'uzytkownik';
 
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (PDOException $e) {
-    die("Błąd połączenia: " . $e->getMessage());
-}
+    $checkQuery = "SELECT * FROM uzytkownicy WHERE nazwa_uzytkownika = '$nazwa_uzytkownika' OR email = '$email'";
+    $result = $conn->query($checkQuery);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Pobierz dane z formularza
-    $imie = $_POST['imie'] ?? '';
-    $nazwisko = $_POST['nazwisko'] ?? '';
-    $nazwa_uzytkownika = $_POST['nazwa_uzytkownika'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $haslo = $_POST['haslo'] ?? '';
-    $potwierdz_haslo = $_POST['potwierdz_haslo'] ?? '';
+    if ($result->num_rows > 0) {
+        $komunikat = "Użytkownik o podanej nazwie lub e-mailu już istnieje.";
+    } else {
+        $sql = "INSERT INTO uzytkownicy (imie, nazwisko, nazwa_uzytkownika, email, haslo, uprawnienia)
+                VALUES ('$imie', '$nazwisko', '$nazwa_uzytkownika', '$email', '$haslo', '$uprawnienia')";
 
-    // Walidacja danych
-    $errors = [];
-
-    if (empty($imie)) $errors[] = "Imię jest wymagane";
-    if (empty($nazwisko)) $errors[] = "Nazwisko jest wymagane";
-    if (empty($nazwa_uzytkownika)) $errors[] = "Nazwa użytkownika jest wymagana";
-    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Podaj poprawny email";
-    if (empty($haslo)) $errors[] = "Hasło jest wymagane";
-    if ($haslo !== $potwierdz_haslo) $errors[] = "Hasła nie są identyczne";
-    if (strlen($haslo) < 8) $errors[] = "Hasło musi mieć co najmniej 8 znaków";
-
-   
-    if (empty($errors)) {
-        $stmt = $pdo->prepare("SELECT * FROM uzytkownicy WHERE email = ? OR nazwa_uzytkownika = ?");
-        $stmt->execute([$email, $nazwa_uzytkownika]);
-        $existing_user = $stmt->fetch();
-
-        if ($existing_user) {
-            if ($existing_user['email'] === $email) $errors[] = "Email jest już zajęty";
-            if ($existing_user['nazwa_uzytkownika'] === $nazwa_uzytkownika) $errors[] = "Nazwa użytkownika jest już zajęta";
+        if ($conn->query($sql) === TRUE) {
+            $komunikat = "Rejestracja zakończona sukcesem!";
+        } else {
+            $komunikat = "Błąd podczas rejestracji: " . $conn->error;
         }
     }
 
-   
-    if (empty($errors)) {
-        $haslo_hash = password_hash($haslo, PASSWORD_DEFAULT);
-        
-        try {
-            $stmt = $pdo->prepare("INSERT INTO uzytkownicy (imie, nazwisko, nazwa_uzytkownika, email, haslo, uprawnienia) 
-                                  VALUES (?, ?, ?, ?, ?, 'uzytkownik')");
-            $stmt->execute([$imie, $nazwisko, $nazwa_uzytkownika, $email, $haslo_hash]);
-            
-            
-            $user_id = $pdo->lastInsertId();
-            $_SESSION['user_id'] = $user_id;
-            $_SESSION['user_name'] = $imie . ' ' . $nazwisko;
-            $_SESSION['user_email'] = $email;
-            $_SESSION['user_role'] = 'uzytkownik';
-            
-            header("Location: index.php");
-            exit;
-        } catch (PDOException $e) {
-            $errors[] = "Błąd podczas rejestracji: " . $e->getMessage();
-        }
-    }
-
-    
-    if (!empty($errors)) {
-        echo '<div class="error-container">';
-        echo '<h2>Wystąpiły następujące błędy:</h2>';
-        echo '<ul>';
-        foreach ($errors as $error) {
-            echo '<li>' . htmlspecialchars($error) . '</li>';
-        }
-        echo '</ul>';
-        echo '<a href="rejestracja.html">Powrót do formularza rejestracji</a>';
-        echo '</div>';
-        exit;
-    }
-} else {
-    header("Location: rejestracja.html");
-    exit;
+    $conn->close();
 }
 ?>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rejestracja</title>
+  <link rel="stylesheet" href="rejestracja.css" />
+</head>
+<body>
+<?php if (!empty($komunikat)): ?>
+  <script>alert("<?php echo htmlspecialchars($komunikat); ?>");</script>
+<?php endif; ?>
+
+<section class="form-section">
+  <h2>Rejestracja</h2>
+  <form action="rejestracja.php" method="post" onsubmit="return validatePasswords()">
+    <input type="text" name="imie" placeholder="Imię" required>
+    <input type="text" name="nazwisko" placeholder="Nazwisko" required>
+    <input type="text" name="nazwa_uzytkownika" placeholder="Nazwa użytkownika" required>
+    <input type="email" name="email" placeholder="Adres e-mail" required />
+    <input type="password" name="password" id="password" placeholder="Hasło" required minlength="6" />
+    <input type="password" name="confirm" id="confirm" placeholder="Potwierdź hasło" required minlength="6" />
+
+    <label class="regulamin-label">
+      <input type="checkbox" id="regulamin" />
+      <span>Akceptuję <a href="regulamin.pdf" target="_blank">regulamin</a></span>
+    </label>
+
+    <button type="submit" id="submitBtn" class="submit-button" disabled>Zarejestruj się</button>
+  </form>
+
+  <a href="login.php" class="back-link">Masz już konto? Zaloguj się</a>
+  <a href="index.php" class="back-link">Powrót do strony głównej</a>
+</section>
+
+<script>
+  const checkbox = document.getElementById('regulamin');
+  const submitBtn = document.getElementById('submitBtn');
+
+  checkbox.addEventListener('change', () => {
+    submitBtn.disabled = !checkbox.checked;
+  });
+
+  const emailInput = document.querySelector('input[name="email"]');
+
+  emailInput.addEventListener('input', () => {
+    const emailValue = emailInput.value;
+    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+
+    if (!isValid) {
+      emailInput.setCustomValidity("Wprowadź poprawny adres e-mail");
+    } else {
+      emailInput.setCustomValidity("");
+    }
+  });
+
+  function validatePasswords() {
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('confirm').value;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasDigit = /\d/.test(password);
+
+    if (!hasUppercase || !hasDigit) {
+      alert('Hasło musi zawierać co najmniej jedną wielką literę i jedną cyfrę.');
+      return false;
+    }
+
+    if (password !== confirm) {
+      alert('Hasła nie są takie same.');
+      return false;
+    }
+
+    return true;
+  }
+</script>
+</body>
+</html>

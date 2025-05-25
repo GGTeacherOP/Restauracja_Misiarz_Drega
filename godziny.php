@@ -25,8 +25,8 @@ for ($h = 12; $h <= 21; $h++) {
     // Wykonanie zapytania i pobranie liczby rezerwacji
     $res = $conn->query($sql)->fetch_assoc();
 
-    // Sprawdzenie, czy wszystkie 13 stolików są zajęte
-    $zajete = $res['ilosc'] >= 13;
+    // Sprawdzenie, czy wszystkie 14 stolików są zajęte
+    $zajete = $res['ilosc'] >= 14;
 
     // Dodanie informacji o godzinie i jej statusie do tablicy
     $godziny[] = [
