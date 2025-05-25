@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h2>Grupy</h2>
         <p>Dla grup liczących 10 lub więcej osób, prosimy o kontakt telefoniczny celem rezerwacji stolika.</p>
         <h2>Szczegóły rezerwacji</h2>
-        <p>Dla grup liczących 10 lub więcej osób, prosimy o kontakt telefoniczny.</p>
+        <p>Dla grup liczących 10 lub więcej osób, prosimy o kontakt telefoniczny pod numer 123 456 789</p>
         <h2>Spóźnienia</h2>
         <p>Przestrzeganie godziny rezerwacji jest bardzo ważne. W przypadku spóźnienia powyżej 15 minut, niestety będziemy zmuszeni przekazać zarezerwowany stolik innym gościom.</p>
 
@@ -76,22 +76,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-</div>
-
     <div class="formularz">
         <h2>Formularz rezerwacji</h2>
         <form method="POST" id="rezerwacjaForm">
-            <label>Imię: <input type="text" name="imie" required></label><br><br>
-            <label>Nazwisko: <input type="text" name="nazwisko" required></label><br><br>
+            <label>Imię: <input type="text" name="imie" placeholder="Imię" required></label><br><br>
+            <label>Nazwisko: <input type="text" name="nazwisko"  placeholder="Nazwisko" required></label><br><br>
             <label>Telefon: <input type="tel" name="telefon" id="telefon" pattern="^\+48-\d{3}-\d{3}-\d{3}$" placeholder="+48-000-000-000" required></label>
             <label>Data: <input type="date" name="data" id="data" required></label><br><br>
             <div id="godziny"></div><br>
             <input type="hidden" name="godzina" id="wybranaGodzina" required>
-            <label>Ilość osób: <input type="number" name="ilosc_osob" min="1" max="9" required></label><br><br>
+            <label>Ilość osób: <input type="number" name="ilosc_osob" placeholder="1-9 osób" min="1" max="9" required></label><br><br>
             <input type="submit" value="Rezerwuj">
         </form>
         <div class="komunikat"><?= $komunikat ?></div><br><br><br><br>
-    <a href="index.html" class="back-btn">← Powrót do strony głównej</a>
+    <a href="index.php" class="back-btn">← Powrót do strony głównej</a>
 
     </div>
 </div>
