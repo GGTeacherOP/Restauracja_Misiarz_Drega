@@ -10,6 +10,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div id="loginModal" class="modal">
+  <div class="modal-content">
+    <h2>Wymagane logowanie</h2>
+    <p>Aby złożyć zamówienie, musisz się najpierw zalogować.</p>
+    <div class="modal-buttons">
+      <a href="login.php?redirect=zamowienie.php" class="login-btn">Zaloguj się</a>
+      <a href="#" class="cancel-btn" onclick="document.getElementById('loginModal').style.display='none'">Anuluj</a>
+    </div>
+  </div>
+</div>
   <main>
   <?php
 session_start();
@@ -67,11 +77,15 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
   </nav>
 
   <header class="hero">
-    <div class="overlay">
-      <h1>Poznaj Smak Kraftowych Dań!</h1>
+  <div class="overlay">
+    <h1>Poznaj Smak Kraftowych Dań!</h1>
+    <?php if (isset($_SESSION['user_id'])): ?>
       <a href="zamowienie.php" class="btn">Zamów Online</a>
-    </div>
-  </header>
+    <?php else: ?>
+      <button class="btn" onclick="document.getElementById('loginModal').style.display='block'">Zamów Online</button>
+    <?php endif; ?>
+  </div>
+</header>
 
   <section id="onas">
     <div class="about-section">
@@ -265,7 +279,13 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     history.replaceState(null, "", window.location.pathname + "#kontakt");
   }
 });
+window.onclick = function(event) {
+  const modal = document.getElementById('loginModal');
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
 </script>
 
 </body>
-</html>
+</html> 
