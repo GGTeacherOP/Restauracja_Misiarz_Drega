@@ -13,30 +13,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
     
     try {
-        $stmt = $pdo->prepare("SELECT id, imie, nazwisko, haslo FROM uzytkownicy WHERE email = ?");
+        $stmt = $pdo->prepare("SELECT id, imie, nazwisko, haslo, uprawnienia FROM uzytkownicy WHERE email = ?");
         $stmt->execute([$email]);
         $user = $stmt->fetch();
 
-        if ($user) {
-            // Tymczasowe obejście - TYLKO DO TESTÓW!
-            $login_success = password_verify($password, $user['haslo']) || $password === 'test123';
+        if ($user && $password === $user['haslo']) { // Porównanie w czystym tekście
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['imie'] . ' ' . $user['nazwisko'];
+            $_SESSION['user_role'] = $user['uprawnienia'];
             
-            if ($login_success) {
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_name'] = $user['imie'] . ' ' . $user['nazwisko'];
-                header('Location: index.php');
-                exit;
+            if (isset($_POST['remember'])) {
+                setcookie('remember_user', $user['id'], time() + (30 * 24 * 60 * 60), "/");
             }
+            
+            header('Location: index.php');
+            exit;
+        } else {
+            $error = 'Nieprawidłowy email lub hasło';
         }
-        
-        $error = 'Nieprawidłowy email lub hasło';
     } catch (PDOException $e) {
         $error = 'Błąd systemu. Spróbuj ponownie.';
     }
 }
 ?>
-
-<!-- Reszta formularza HTML bez zmian -->
 <!DOCTYPE html>
 <html lang="pl">
 <head>
