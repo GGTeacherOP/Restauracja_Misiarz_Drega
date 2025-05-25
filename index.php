@@ -67,19 +67,26 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
         <li><a href="#kontakt">Kontakt</a></li>
         <li><a href="rezerwacja.php">Rezerwacja</a></li>
     </ul>
-    <?php if (isset($_SESSION['user_id'])): ?>
+<?php if (isset($_SESSION['user_id'])): ?>
 <div class="user-menu">
     <span>Witaj, <?= htmlspecialchars($_SESSION['user_name']) ?></span>
-    <?php if ($_SESSION['user_role'] === 'admin' || $_SESSION['user_role'] === 'wlasciciel'): ?>
-        <a href="admin_dashboard.php" class="admin-button">
-            <?= $_SESSION['user_role'] === 'wlasciciel' ? 'Panel Właściciela' : 'Panel Admina' ?>
-        </a>
+
+    <?php
+    // Pokazuje odpowiedni link panelu w zależności od roli
+    if ($_SESSION['user_role'] === 'wlasciciel'): ?>
+        <a href="wlasciciel_panel.php" class="panel-button">Panel Właściciela</a>
+    <?php elseif ($_SESSION['user_role'] === 'admin'): ?>
+        <a href="admin_dashboard.php" class="panel-button">Panel Admina</a>
+    <?php elseif ($_SESSION['user_role'] === 'obsluga'): ?>
+        <a href="client_service_dashboard.php" class="panel-button">Panel Obsługi Klienta</a>
     <?php endif; ?>
+
     <a href="logout.php" class="logout-button">Wyloguj</a>
 </div>
-    <?php else: ?>
-        <a href="login.php"><button class="login-button">Zaloguj się</button></a>
-    <?php endif; ?>
+<?php else: ?>
+    <a href="login.php"><button class="login-button">Zaloguj się</button></a>
+<?php endif; ?>
+
 </nav>
 
   <header class="hero">
