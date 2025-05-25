@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 25, 2025 at 09:01 PM
+-- Generation Time: Maj 25, 2025 at 10:50 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -24,13 +24,34 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `odpowiedzi`
+--
+
+CREATE TABLE `odpowiedzi` (
+  `id` int(11) NOT NULL,
+  `pytanie_id` int(11) NOT NULL,
+  `uzytkownik_id` int(11) NOT NULL,
+  `tresc` text NOT NULL,
+  `data_dodania` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `odpowiedzi`
+--
+
+INSERT INTO `odpowiedzi` (`id`, `pytanie_id`, `uzytkownik_id`, `tresc`, `data_dodania`) VALUES
+(1, 2, 14, 'Tak, w razie potrzeby proszę dzwonić pod numer: 123 456 789.', '2025-05-25 22:34:46');
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `opinie`
 --
 
 CREATE TABLE `opinie` (
   `id` int(11) NOT NULL,
   `uzytkownik_id` int(11) DEFAULT NULL,
-  `imie` varchar(100) DEFAULT NULL,
+  `nazwa_uzytkownika` varchar(100) NOT NULL,
   `tresc` text DEFAULT NULL,
   `data_dodania` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -39,11 +60,24 @@ CREATE TABLE `opinie` (
 -- Dumping data for table `opinie`
 --
 
-INSERT INTO `opinie` (`id`, `uzytkownik_id`, `imie`, `tresc`, `data_dodania`) VALUES
+INSERT INTO `opinie` (`id`, `uzytkownik_id`, `nazwa_uzytkownika`, `tresc`, `data_dodania`) VALUES
 (1, NULL, 'Ewa', 'Polecam.', '2025-05-18 23:13:33'),
 (2, NULL, 'Marek', 'Rewelacyjne miejsce! Jedzenie przepyszne, obsługa bardzo miła i pomocna. Zdecydowanie polecam', '2025-05-18 23:23:32'),
 (3, NULL, 'Janek', 'Fajna restauracja', '2025-05-19 00:13:32'),
 (5, NULL, 'Dominik', 'Cudowne miejsce! Jedzenie przepyszne, obsługa bardzo miła i pomocna. Zdecydowanie polecam! UwU', '2025-05-19 22:09:26');
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `opinie_z_uzytkownikami`
+-- (See below for the actual view)
+--
+CREATE TABLE `opinie_z_uzytkownikami` (
+`id` int(11)
+,`tresc` text
+,`data_dodania` datetime
+,`nazwa_uzytkownika` varchar(50)
+);
 
 -- --------------------------------------------------------
 
@@ -78,6 +112,24 @@ INSERT INTO `pracownicy` (`id`, `uzytkownik_id`, `imie`, `nazwisko`, `stanowisko
 (8, NULL, 'Tomasz', 'Dąbrowski', 'Pracownik magazynu', 'tomasz.dabrowski@restauracja.pl', '+48 890 123 456', 3600.00, '2023-05-10'),
 (9, NULL, 'Barbara', 'Szymańska', 'Hostessa', 'barbara.szymanska@restauracja.pl', '+48 901 234 567', 4000.00, '2022-09-01'),
 (10, NULL, 'Grzegorz', 'Woźniak', 'Kucharz', 'grzegorz.wozniak@restauracja.pl', '+48 012 345 678', 5500.00, '2021-07-15');
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `pracownicy_z_kontem`
+-- (See below for the actual view)
+--
+CREATE TABLE `pracownicy_z_kontem` (
+`id` int(11)
+,`nazwa_uzytkownika` varchar(50)
+,`imie` varchar(50)
+,`nazwisko` varchar(50)
+,`stanowisko` varchar(50)
+,`email` varchar(100)
+,`telefon` varchar(20)
+,`pensja` decimal(10,2)
+,`data_zatrudnienia` date
+);
 
 -- --------------------------------------------------------
 
@@ -139,6 +191,24 @@ INSERT INTO `rezerwacje` (`id`, `imie`, `nazwisko`, `telefon`, `data`, `godzina`
 -- --------------------------------------------------------
 
 --
+-- Zastąpiona struktura widoku `rezerwacje_szczegoly`
+-- (See below for the actual view)
+--
+CREATE TABLE `rezerwacje_szczegoly` (
+`id` int(11)
+,`imie` varchar(50)
+,`nazwisko` varchar(50)
+,`telefon` varchar(15)
+,`data` date
+,`godzina` time
+,`ilosc_osob` int(11)
+,`stolik_nr` int(11)
+,`nazwa_uzytkownika` varchar(50)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `uzytkownicy`
 --
 
@@ -149,7 +219,7 @@ CREATE TABLE `uzytkownicy` (
   `nazwa_uzytkownika` varchar(50) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `haslo` varchar(200) DEFAULT NULL,
-  `uprawnienia` enum('admin','uzytkownik','wlasciciel') NOT NULL,
+  `uprawnienia` enum('uzytkownik','admin','wlasciciel','obsluga') NOT NULL DEFAULT 'uzytkownik',
   `remember_token` varchar(64) DEFAULT NULL,
   `token_expiry` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -168,7 +238,8 @@ INSERT INTO `uzytkownicy` (`id`, `imie`, `nazwisko`, `nazwa_uzytkownika`, `email
 (7, 'Marek', 'Szymański', 'mareksz', 'marek.szymanski@example.com', 'dwew@e21', 'uzytkownik', NULL, NULL),
 (8, 'Ewa', 'Kaczmarek', 'ewka', 'ewa.kaczmarek@example.com', 'adm@se32', 'admin', NULL, NULL),
 (9, 'Andrzej', 'Kwiadkowski', 'AndrejKwiatek', 'and.kwiatek@gmail.com', 'sh@eyws2123', 'uzytkownik', NULL, NULL),
-(10, 'Jacek', 'Śliwa', 'właściciel', 'wlasciciel@restauracja.pl', '$2y$10$TajneHaslo123', 'wlasciciel', NULL, NULL);
+(10, 'Jacek', 'Śliwa', 'właściciel', 'wlasciciel@restauracja.pl', '$2y$10$TajneHaslo123', 'wlasciciel', NULL, NULL),
+(14, 'Paweł', 'Majewski', 'pawel_obsluga', 'pawel.majewski@example.com', 'Obsluga123!', 'obsluga', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -196,9 +267,71 @@ INSERT INTO `zamowienia` (`id`, `imie_nazwisko`, `telefon`, `adres`, `dania`, `c
 (1, 'Mikołaj Misiarz', '666 333 999', 'Ulica jakas 48g', 'Pizza Primavera', 44.00, '2025-05-15 19:00:18', 'nowe', NULL),
 (2, 'Andrzej Nowak', '333 444 555', 'Jagielonczyka 45c', 'Makaron Pappardelle z Kurczakiem', 42.00, '2025-05-15 19:01:26', 'nowe', NULL);
 
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `zamowienia_uzytkownikow`
+-- (See below for the actual view)
+--
+CREATE TABLE `zamowienia_uzytkownikow` (
+`id` int(11)
+,`imie_nazwisko` varchar(100)
+,`telefon` varchar(15)
+,`adres` varchar(200)
+,`dania` text
+,`cena` decimal(10,2)
+,`data_zamowienia` datetime
+,`status` enum('nowe','w_realizacji','dostarczone')
+,`nazwa_uzytkownika` varchar(50)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `opinie_z_uzytkownikami`
+--
+DROP TABLE IF EXISTS `opinie_z_uzytkownikami`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `opinie_z_uzytkownikami`  AS SELECT `o`.`id` AS `id`, `o`.`tresc` AS `tresc`, `o`.`data_dodania` AS `data_dodania`, `u`.`nazwa_uzytkownika` AS `nazwa_uzytkownika` FROM (`opinie` `o` join `uzytkownicy` `u` on(`o`.`uzytkownik_id` = `u`.`id`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `pracownicy_z_kontem`
+--
+DROP TABLE IF EXISTS `pracownicy_z_kontem`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `pracownicy_z_kontem`  AS SELECT `p`.`id` AS `id`, `u`.`nazwa_uzytkownika` AS `nazwa_uzytkownika`, `p`.`imie` AS `imie`, `p`.`nazwisko` AS `nazwisko`, `p`.`stanowisko` AS `stanowisko`, `p`.`email` AS `email`, `p`.`telefon` AS `telefon`, `p`.`pensja` AS `pensja`, `p`.`data_zatrudnienia` AS `data_zatrudnienia` FROM (`pracownicy` `p` join `uzytkownicy` `u` on(`p`.`uzytkownik_id` = `u`.`id`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `rezerwacje_szczegoly`
+--
+DROP TABLE IF EXISTS `rezerwacje_szczegoly`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `rezerwacje_szczegoly`  AS SELECT `r`.`id` AS `id`, `r`.`imie` AS `imie`, `r`.`nazwisko` AS `nazwisko`, `r`.`telefon` AS `telefon`, `r`.`data` AS `data`, `r`.`godzina` AS `godzina`, `r`.`ilosc_osob` AS `ilosc_osob`, `r`.`stolik_nr` AS `stolik_nr`, `u`.`nazwa_uzytkownika` AS `nazwa_uzytkownika` FROM (`rezerwacje` `r` join `uzytkownicy` `u` on(`r`.`uzytkownik_id` = `u`.`id`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `zamowienia_uzytkownikow`
+--
+DROP TABLE IF EXISTS `zamowienia_uzytkownikow`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `zamowienia_uzytkownikow`  AS SELECT `z`.`id` AS `id`, `z`.`imie_nazwisko` AS `imie_nazwisko`, `z`.`telefon` AS `telefon`, `z`.`adres` AS `adres`, `z`.`dania` AS `dania`, `z`.`cena` AS `cena`, `z`.`data_zamowienia` AS `data_zamowienia`, `z`.`status` AS `status`, `u`.`nazwa_uzytkownika` AS `nazwa_uzytkownika` FROM (`zamowienia` `z` join `uzytkownicy` `u` on(`z`.`user_id` = `u`.`id`)) ;
+
 --
 -- Indeksy dla zrzutów tabel
 --
+
+--
+-- Indeksy dla tabeli `odpowiedzi`
+--
+ALTER TABLE `odpowiedzi`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pytanie_id` (`pytanie_id`),
+  ADD KEY `uzytkownik_id` (`uzytkownik_id`);
 
 --
 -- Indeksy dla tabeli `opinie`
@@ -218,6 +351,7 @@ ALTER TABLE `pracownicy`
 -- Indeksy dla tabeli `pytania`
 --
 ALTER TABLE `pytania`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `fk_pytania_uzytkownik` (`uzytkownik_id`);
 
 --
@@ -247,10 +381,22 @@ ALTER TABLE `zamowienia`
 --
 
 --
+-- AUTO_INCREMENT for table `odpowiedzi`
+--
+ALTER TABLE `odpowiedzi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `pracownicy`
 --
 ALTER TABLE `pracownicy`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `pytania`
+--
+ALTER TABLE `pytania`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `rezerwacje`
@@ -262,7 +408,7 @@ ALTER TABLE `rezerwacje`
 -- AUTO_INCREMENT for table `uzytkownicy`
 --
 ALTER TABLE `uzytkownicy`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `zamowienia`
@@ -273,6 +419,13 @@ ALTER TABLE `zamowienia`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `odpowiedzi`
+--
+ALTER TABLE `odpowiedzi`
+  ADD CONSTRAINT `odpowiedzi_ibfk_1` FOREIGN KEY (`pytanie_id`) REFERENCES `pytania` (`id`),
+  ADD CONSTRAINT `odpowiedzi_ibfk_2` FOREIGN KEY (`uzytkownik_id`) REFERENCES `uzytkownicy` (`id`);
 
 --
 -- Constraints for table `opinie`
