@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 25, 2025 at 10:50 PM
+-- Generation Time: Maj 30, 2025 at 12:30 AM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -53,18 +53,20 @@ CREATE TABLE `opinie` (
   `uzytkownik_id` int(11) DEFAULT NULL,
   `nazwa_uzytkownika` varchar(100) NOT NULL,
   `tresc` text DEFAULT NULL,
-  `data_dodania` datetime DEFAULT current_timestamp()
+  `data_dodania` datetime DEFAULT current_timestamp(),
+  `zatwierdzona` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `opinie`
 --
 
-INSERT INTO `opinie` (`id`, `uzytkownik_id`, `nazwa_uzytkownika`, `tresc`, `data_dodania`) VALUES
-(1, NULL, 'Ewa', 'Polecam.', '2025-05-18 23:13:33'),
-(2, NULL, 'Marek', 'Rewelacyjne miejsce! Jedzenie przepyszne, obsługa bardzo miła i pomocna. Zdecydowanie polecam', '2025-05-18 23:23:32'),
-(3, NULL, 'Janek', 'Fajna restauracja', '2025-05-19 00:13:32'),
-(5, NULL, 'Dominik', 'Cudowne miejsce! Jedzenie przepyszne, obsługa bardzo miła i pomocna. Zdecydowanie polecam! UwU', '2025-05-19 22:09:26');
+INSERT INTO `opinie` (`id`, `uzytkownik_id`, `nazwa_uzytkownika`, `tresc`, `data_dodania`, `zatwierdzona`) VALUES
+(1, NULL, 'Ewa', 'Polecam.', '2025-05-18 23:13:33', 1),
+(2, NULL, 'Marek', 'Rewelacyjne miejsce! Jedzenie przepyszne, obsługa bardzo miła i pomocna. Zdecydowanie polecam', '2025-05-18 23:23:32', 1),
+(3, NULL, 'Janek', 'Fajna restauracja', '2025-05-19 00:13:32', 1),
+(5, NULL, 'Dominik', 'Cudowne miejsce! Jedzenie przepyszne, obsługa bardzo miła i pomocna. Zdecydowanie polecam! UwU', '2025-05-19 22:09:26', 1),
+(6, 9, 'AndrejKwiatek', 'Bardzo fajne miejsce', '2025-05-29 22:44:18', 0);
 
 -- --------------------------------------------------------
 
@@ -151,7 +153,6 @@ CREATE TABLE `pytania` (
 --
 
 INSERT INTO `pytania` (`id`, `uzytkownik_id`, `imie`, `email`, `tresc`, `data_dodania`) VALUES
-(1, 9, 'Ewa', 'ewanowak@gmail.com', 'Jakie są godziny otwarcia?', '2025-05-20 01:02:20'),
 (2, 9, 'Ewa', 'ewanowak@gmail.com', 'Czy jest możliwość organizacji przyjęć?', '2025-05-20 01:13:06'),
 (3, 9, 'Jan', 'jan_kowalski12@gmail.com', 'Jaki jest numer kontaktowy?', '2025-05-20 01:16:15');
 
@@ -186,7 +187,41 @@ INSERT INTO `rezerwacje` (`id`, `imie`, `nazwisko`, `telefon`, `data`, `godzina`
 (6, 'Karolina', 'Mazur', '+48-222-333-444', '2025-05-15', '19:00:00', 5, 6, NULL),
 (7, 'Michał', 'Dąbrowski', '+48-666-777-888', '2025-05-15', '20:30:00', 2, 2, NULL),
 (8, 'Ewa', 'Lewandowska', '+48-999-000-111', '2025-05-16', '18:15:00', 1, 8, NULL),
-(9, 'Robert', 'Wójcik', '+48-888-999-000', '2025-05-16', '21:00:00', 4, 9, NULL);
+(9, 'Robert', 'Wójcik', '+48-888-999-000', '2025-05-16', '21:00:00', 4, 9, NULL),
+(16, 'Jan', 'Kowalski', '+48-111-111-111', '2025-05-29', '13:00:00', 4, 1, NULL),
+(17, 'Jan', 'Kowalski', '+48-111-111-111', '2025-05-29', '13:00:00', 4, 2, NULL),
+(18, 'Jan', 'Kowalski', '+48-111-111-111', '2025-05-31', '13:00:00', 2, 1, NULL),
+(19, 'Jan', 'Kowalski', '+48-111-111-111', '2025-05-31', '13:00:00', 2, 2, NULL),
+(20, 'Jan', 'Kowalski', '+48-111-111-111', '2025-05-31', '13:00:00', 2, 3, NULL),
+(21, 'Jan', 'Kowalski', '+48-111-111-111', '2025-05-31', '21:00:00', 2, 1, NULL),
+(22, 'Jan', 'Kowalski', '+48-111-111-111', '2025-05-31', '21:00:00', 2, 2, NULL),
+(23, 'Jan', 'Kowalski', '+48-111-111-111', '2025-05-31', '21:00:00', 2, 3, NULL),
+(24, 'Jan', 'Kowalski', '+48-111-111-111', '2025-05-31', '16:00:00', 2, 1, NULL),
+(25, 'Jan', 'Kowalski', '+48-111-111-111', '2025-05-31', '16:00:00', 2, 2, NULL),
+(26, 'Jan', 'Kowalski', '+48-111-111-111', '2025-05-31', '16:00:00', 2, 3, NULL),
+(27, 'Jan', 'Kowalski', '+48-111-111-111', '2025-05-31', '16:00:00', 2, 4, NULL),
+(30, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '13:00:00', 2, 4, NULL),
+(31, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '13:00:00', 2, 5, NULL),
+(32, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '13:00:00', 2, 6, NULL),
+(33, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '13:00:00', 2, 7, NULL),
+(34, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '13:00:00', 2, 8, NULL),
+(35, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '13:00:00', 2, 9, NULL),
+(36, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '13:00:00', 2, 10, NULL),
+(37, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '13:00:00', 2, 11, NULL),
+(38, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '13:00:00', 2, 12, NULL),
+(39, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '13:00:00', 2, 13, NULL),
+(40, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '13:00:00', 2, 14, NULL),
+(41, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '16:00:00', 2, 5, NULL),
+(42, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '16:00:00', 2, 6, NULL),
+(43, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '16:00:00', 2, 7, NULL),
+(44, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '16:00:00', 2, 8, NULL),
+(45, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '16:00:00', 2, 9, NULL),
+(46, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '16:00:00', 2, 10, NULL),
+(47, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '16:00:00', 2, 11, NULL),
+(48, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '16:00:00', 2, 12, NULL),
+(49, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '16:00:00', 2, 13, NULL),
+(50, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '16:00:00', 2, 14, NULL),
+(51, 'Adam', 'Nowak', '+48-421-453-599', '2025-05-31', '21:00:00', 2, 4, NULL);
 
 -- --------------------------------------------------------
 
@@ -337,6 +372,7 @@ ALTER TABLE `odpowiedzi`
 -- Indeksy dla tabeli `opinie`
 --
 ALTER TABLE `opinie`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `fk_opinie_uzytkownik` (`uzytkownik_id`);
 
 --
@@ -384,7 +420,13 @@ ALTER TABLE `zamowienia`
 -- AUTO_INCREMENT for table `odpowiedzi`
 --
 ALTER TABLE `odpowiedzi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `opinie`
+--
+ALTER TABLE `opinie`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `pracownicy`
@@ -396,13 +438,13 @@ ALTER TABLE `pracownicy`
 -- AUTO_INCREMENT for table `pytania`
 --
 ALTER TABLE `pytania`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `rezerwacje`
 --
 ALTER TABLE `rezerwacje`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `uzytkownicy`
@@ -414,7 +456,7 @@ ALTER TABLE `uzytkownicy`
 -- AUTO_INCREMENT for table `zamowienia`
 --
 ALTER TABLE `zamowienia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -424,7 +466,7 @@ ALTER TABLE `zamowienia`
 -- Constraints for table `odpowiedzi`
 --
 ALTER TABLE `odpowiedzi`
-  ADD CONSTRAINT `odpowiedzi_ibfk_1` FOREIGN KEY (`pytanie_id`) REFERENCES `pytania` (`id`),
+  ADD CONSTRAINT `odpowiedzi_ibfk_1` FOREIGN KEY (`pytanie_id`) REFERENCES `pytania` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `odpowiedzi_ibfk_2` FOREIGN KEY (`uzytkownik_id`) REFERENCES `uzytkownicy` (`id`);
 
 --
