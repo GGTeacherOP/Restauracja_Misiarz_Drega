@@ -1,4 +1,18 @@
 <?php
+session_start();
+
+// Sprawdź, czy użytkownik jest zalogowany - załóżmy, że $_SESSION['user_id'] jest ustawione po logowaniu
+if (!isset($_SESSION['user_id'])) {
+    // Jeśli nie zalogowany, przekieruj na stronę logowania
+    header('Location: login.php');
+    exit();
+}
+
+// dalsza część strony z formularzem rezerwacji...
+?>
+
+
+<?php
 $host = 'localhost';
 $user = 'root';
 $pass = '';
@@ -29,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Znajdź pierwszy wolny stolik
     $wolny_stolik = null;
-    for ($i = 1; $i <= 13; $i++) {
+    for ($i = 1; $i <= 14; $i++) {
         if (!in_array($i, $zajete)) {
             $wolny_stolik = $i;
             break;
@@ -85,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label>Data: <input type="date" name="data" id="data" required></label><br><br>
             <div id="godziny"></div><br>
             <input type="hidden" name="godzina" id="wybranaGodzina" required>
-            <label>Ilość osób: <input type="number" name="ilosc_osob" placeholder="1-9 osób" min="1" max="9" required></label><br><br>
+            <label>Ilość osób: <input type="number" name="ilosc_osob" placeholder="1-4 osób" min="1" max="4" required></label><br><br>
             <input type="submit" value="Rezerwuj">
         </form>
         <div class="komunikat"><?= $komunikat ?></div><br><br><br><br>
@@ -95,6 +109,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script>
+
+    const dzisiaj = new Date().toISOString().split('T')[0];
+    document.getElementById("data").setAttribute('min', dzisiaj);
+
 document.getElementById('data').addEventListener('change', function () {
     const data = this.value;
     fetch('godziny.php?data=' + data)
