@@ -47,9 +47,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_SESSION['user_id'])) {
             if ($user) {
                 $nazwaUzytkownika = $user['nazwa_uzytkownika'];
 
-                $stmt = $pdo->prepare("INSERT INTO opinie (uzytkownik_id, nazwa_uzytkownika, tresc, data_dodania) VALUES (?, ?, ?, NOW())");
+                $stmt = $pdo->prepare("INSERT INTO opinie (uzytkownik_id, nazwa_uzytkownika, tresc, data_dodania, zatwierdzona) VALUES (?, ?, ?, NOW(), 0)");
                 $stmt->execute([$_SESSION['user_id'], $nazwaUzytkownika, $tresc]);
-                $komunikat = "<p style='color:green;'>✅ Dziękujemy za opinię!</p>";
+
+                header("Location: index.php");
+                exit();
+
             } else {
                 $komunikat = "<p style='color:red;'>Nie znaleziono użytkownika.</p>";
             }
