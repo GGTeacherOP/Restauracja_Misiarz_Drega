@@ -179,7 +179,7 @@ $questions = $pdo->query("SELECT * FROM pytania")->fetchAll();
                     <?php foreach ($opinions as $opinion): ?>
                     <tr>
                         <td><?= htmlspecialchars($opinion['id']) ?></td>
-                        <td><?= htmlspecialchars($opinion['imie']) ?></td>
+                        <td><?= htmlspecialchars($opinion['nazwa_uzytkownika']) ?></td>
                         <td><?= htmlspecialchars(substr($opinion['tresc'], 0, 50)) ?>...</td>
                         <td><?= htmlspecialchars($opinion['data_dodania']) ?></td>
                         <td>
