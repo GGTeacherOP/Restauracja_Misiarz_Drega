@@ -74,7 +74,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     <?php
     // Pokazuje odpowiedni link panelu w zależności od roli
     if ($_SESSION['user_role'] === 'wlasciciel'): ?>
-        <a href="wlasciciel_panel.php" class="panel-button">Panel Właściciela</a>
+        <a href="admin_dashboard.php" class="panel-button">Panel Właściciela</a>
     <?php elseif ($_SESSION['user_role'] === 'admin'): ?>
         <a href="admin_dashboard.php" class="panel-button">Panel Admina</a>
     <?php elseif ($_SESSION['user_role'] === 'obsluga'): ?>
@@ -156,7 +156,8 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     if ($conn->connect_error) {
       echo "<p>Błąd połączenia z bazą danych.</p>";
     } else {
-      $sql = "SELECT nazwa_uzytkownika, tresc, data_dodania FROM opinie ORDER BY id DESC LIMIT 10";
+      // Tylko zatwierdzone opinie
+      $sql = "SELECT nazwa_uzytkownika, tresc, data_dodania FROM opinie WHERE zatwierdzona = 1 ORDER BY id DESC LIMIT 10";
       $result = $conn->query($sql);
 
       if ($result->num_rows > 0) {
@@ -171,7 +172,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
           echo '</div>';
         }
       } else {
-        echo "<p>Brak jeszcze opinii.</p>";
+        echo "<p>Brak jeszcze zatwierdzonych opinii.</p>";
       }
 
       $conn->close();
@@ -186,6 +187,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
         <p class="logowanie-opinia">Aby dodać opinię, <a href="login.php?redirect=index.php#opinie">zaloguj się</a>.</p>
     <?php endif; ?>
 </section>
+
 
   <section id="kontakt">
   <h1>Masz pytania? Napisz do nas</h1>

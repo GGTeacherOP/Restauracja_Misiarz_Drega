@@ -15,21 +15,30 @@ if (!in_array($_SESSION['user_role'], ['obsluga', 'admin', 'wlasciciel'])) {
 
 $userName = $_SESSION['user_name'];
 
-// Usuwanie opinii
+// Obsługa formularzy POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Usuwanie opinii
     if (isset($_POST['delete_opinion'])) {
         $opinionId = $_POST['opinion_id'];
         $stmt = $pdo->prepare("DELETE FROM opinie WHERE id = ?");
         $stmt->execute([$opinionId]);
     }
-    
+
+    // Zatwierdzanie opinii
+    if (isset($_POST['zatwierdz_opinion'])) {
+        $opinionId = $_POST['opinion_id'];
+        $stmt = $pdo->prepare("UPDATE opinie SET zatwierdzona = 1 WHERE id = ?");
+        $stmt->execute([$opinionId]);
+        $_SESSION['success_msg'] = "Opinia została zatwierdzona.";
+    }
+
+
     // Dodawanie odpowiedzi na pytanie
     if (isset($_POST['answer_question'])) {
         $questionId = $_POST['question_id'];
         $answerText = trim($_POST['answer_text']);
 
         if ($answerText !== '') {
-            // Przykład: zapisz odpowiedź do tabeli 'odpowiedzi'
             $stmt = $pdo->prepare("INSERT INTO odpowiedzi (pytanie_id, uzytkownik_id, tresc, data_dodania) VALUES (?, ?, ?, NOW())");
             $stmt->execute([$questionId, $_SESSION['user_id'], $answerText]);
             $_SESSION['success_msg'] = "Odpowiedź została zapisana.";
@@ -40,16 +49,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Usuwanie pytania
     if (isset($_POST['delete_question'])) {
-        $questionId = $_POST['question_id'];
-        $stmt = $pdo->prepare("DELETE FROM pytania WHERE id = ?");
-        $stmt->execute([$questionId]);
-    }
+    $questionId = $_POST['question_id'];
+
+    // Najpierw usuń odpowiedzi powiązane z pytaniem
+    $stmt = $pdo->prepare("DELETE FROM odpowiedzi WHERE pytanie_id = ?");
+    $stmt->execute([$questionId]);
+
+    // Następnie usuń pytanie
+    $stmt = $pdo->prepare("DELETE FROM pytania WHERE id = ?");
+    $stmt->execute([$questionId]);
+}
+
 }
 
 // Pobranie opinii i pytań
-$opinions = $pdo->query("SELECT id, nazwa_uzytkownika, tresc, data_dodania FROM opinie ORDER BY data_dodania DESC")->fetchAll();
+$opinions = $pdo->query("SELECT id, nazwa_uzytkownika, tresc, data_dodania, zatwierdzona FROM opinie ORDER BY data_dodania DESC")->fetchAll();
 $questions = $pdo->query("SELECT p.id, p.email, p.tresc, p.data_dodania, u.nazwa_uzytkownika FROM pytania p LEFT JOIN uzytkownicy u ON p.uzytkownik_id = u.id ORDER BY p.data_dodania DESC")->fetchAll();
-
 ?>
 
 <!DOCTYPE html>
@@ -91,6 +106,7 @@ $questions = $pdo->query("SELECT p.id, p.email, p.tresc, p.data_dodania, u.nazwa
                         <th>Użytkownik</th>
                         <th>Treść</th>
                         <th>Data</th>
+                        <th>Status</th>
                         <th>Akcje</th>
                     </tr>
                 </thead>
@@ -101,11 +117,17 @@ $questions = $pdo->query("SELECT p.id, p.email, p.tresc, p.data_dodania, u.nazwa
                             <td><?= htmlspecialchars($opinion['nazwa_uzytkownika']) ?></td>
                             <td><?= htmlspecialchars(mb_strimwidth($opinion['tresc'], 0, 50, '...')) ?></td>
                             <td><?= htmlspecialchars($opinion['data_dodania']) ?></td>
+                            <td><?= $opinion['zatwierdzona'] ? 'Zatwierdzona' : 'Niezatwierdzona' ?></td>
                             <td>
+                                <?php if (!$opinion['zatwierdzona']): ?>
+                                    <form method="POST" style="display:inline;">
+                                        <input type="hidden" name="opinion_id" value="<?= $opinion['id'] ?>">
+                                        <button type="submit" name="zatwierdz_opinion" class="btn">Zatwierdź</button>
+                                    </form>
+                                <?php endif; ?>
                                 <form method="POST" style="display:inline;">
                                     <input type="hidden" name="opinion_id" value="<?= $opinion['id'] ?>">
-                                    <button type="submit" name="delete_opinion" class="btn" 
-                                    onclick="return confirm('Czy na pewno chcesz usunąć tę opinię?')">Usuń</button>
+                                    <button type="submit" name="delete_opinion" class="btn" onclick="return confirm('Czy na pewno chcesz usunąć tę opinię?')">Usuń</button>
                                 </form>
                             </td>
                         </tr>
@@ -137,7 +159,6 @@ $questions = $pdo->query("SELECT p.id, p.email, p.tresc, p.data_dodania, u.nazwa
                             <td><?= htmlspecialchars(mb_strimwidth($question['tresc'], 0, 50, '...')) ?></td>
                             <td><?= htmlspecialchars($question['data_dodania']) ?></td>
                             <td>
-                                <!-- Formularz odpowiedzi -->
                                 <form method="POST" class="answer-form">
                                     <input type="hidden" name="question_id" value="<?= $question['id'] ?>">
                                     <textarea name="answer_text" placeholder="Twoja odpowiedź..."></textarea><br>
@@ -147,8 +168,7 @@ $questions = $pdo->query("SELECT p.id, p.email, p.tresc, p.data_dodania, u.nazwa
                             <td>
                                 <form method="POST" style="display:inline;">
                                     <input type="hidden" name="question_id" value="<?= $question['id'] ?>">
-                                    <button type="submit" name="delete_question" class="btn"
-                                    onclick="return confirm('Czy na pewno chcesz usunąć to pytanie?')">Usuń</button>
+                                    <button type="submit" name="delete_question" class="btn" onclick="return confirm('Czy na pewno chcesz usunąć to pytanie?')">Usuń</button>
                                 </form>
                             </td>
                         </tr>
