@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nazwisko = $conn->real_escape_string($_POST['nazwisko']);
     $nazwa_uzytkownika = $conn->real_escape_string($_POST['nazwa_uzytkownika']);
     $email = $conn->real_escape_string($_POST['email']);
-    $haslo = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $haslo = $conn->real_escape_string($_POST['password']); // Usunięto hashowanie
     $uprawnienia = 'uzytkownik';
 
     $checkQuery = "SELECT * FROM uzytkownicy WHERE nazwa_uzytkownika = '$nazwa_uzytkownika' OR email = '$email'";

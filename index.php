@@ -74,7 +74,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     <?php
     // Pokazuje odpowiedni link panelu w zależności od roli
     if ($_SESSION['user_role'] === 'wlasciciel'): ?>
-        <a href="wlasciciel_panel.php" class="panel-button">Panel Właściciela</a>
+        <a href="admin_dashboard.php" class="panel-button">Panel Właściciela</a>
     <?php elseif ($_SESSION['user_role'] === 'admin'): ?>
         <a href="admin_dashboard.php" class="panel-button">Panel Admina</a>
     <?php elseif ($_SESSION['user_role'] === 'obsluga'): ?>
