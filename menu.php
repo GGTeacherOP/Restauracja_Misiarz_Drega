@@ -16,6 +16,7 @@
       <li><a href="index.php">Galeria</a></li>
       <li><a href="index.php">Opinie</a></li>
       <li><a href="index.php">Kontakt</a></li>
+      <li><a href="rezerwacja.php">Rezerwacja</a></li>
     </ul>
     <?php if (isset($_SESSION['user_id'])): ?>
     <div class="user-menu">
